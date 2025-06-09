@@ -1,7 +1,9 @@
+//Aqui se redirecionará o usuário para /(logged-in)
+
 import { Text, View } from "react-native";
 import '@/global.css'
 
-export default function Index() {
+export default function Authentication() {
   return (
     <View
       style={{
@@ -10,7 +12,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Text>Authentication</Text>
     </View>
   );
 }
