@@ -1,1 +1,0 @@
-//Aqui se redirecionará o usuário não autenticado para authentication.tsx.
