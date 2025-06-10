@@ -1,8 +1,8 @@
 import { mainBalck } from "@/assets/colors/colors";
+import '@/global.css';
 import { Text, View } from "react-native";
-import TextField from "./components/TextField";
 
-export default function Index() {
+export default function Dashboard() {
   return (
     <View
       style={{
@@ -12,8 +12,7 @@ export default function Index() {
         backgroundColor: mainBalck
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-      <TextField />
+      <Text>Dashboard</Text>
     </View>
   );
 }
