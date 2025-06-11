@@ -1,27 +1,29 @@
-import { mainBalck, mainYello } from "@/assets/colors/colors";
+import { mainBalck } from "@/assets/colors/colors";
 import { FontAwesome } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
 
 type Props = {
     onClick?: () => any,
-    icon: keyof typeof FontAwesome.glyphMap
+    icon: keyof typeof FontAwesome.glyphMap,
+    style?: Record<string, any>,
+    iconColor?: string,
+    iconSize?: number
 };
 
-export default function YellowIconButton({ onClick, icon }: Props) {
+export default function IconButton({ onClick, icon, style, iconColor, iconSize }: Props) {
     return (
         <Pressable onPress={() => {
             if (onClick) {
                 onClick()
             }
-        }} style={styles.button}>
-            <FontAwesome name={icon} size={20} color={mainBalck} />
+        }} style={{ ...styles.button, ...style }}>
+            <FontAwesome name={icon} size={iconSize ? iconSize : 20} color={iconColor ? iconColor : mainBalck} />
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: mainYello,
         height: 35,
         width: 35,
         borderRadius: 35,

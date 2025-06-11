@@ -1,4 +1,4 @@
-import { mainWhite } from '@/assets/colors/colors';
+import { mainBalck, mainWhite } from '@/assets/colors/colors';
 import '@/global.css';
 import {
   Keyboard,
@@ -9,17 +9,18 @@ import {
   View
 } from "react-native";
 import ChatTextField from '../components/ChatTextField';
+import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 
 export default function IAChat() {
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{ flex: 1, backgroundColor: mainBalck }}
       behavior={"padding"}
-      keyboardVerticalOffset={100}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.contentHolder}>
+          <Header />
           <View style={styles.verticalSugestions}>
             <Text style={styles.sugestionTitle}>Sobre o que você quer conversar hoje ?</Text>
             <TextButton text="Crie um plano de investimento para 6 meses" style={styles.verticalSugestionButton} />

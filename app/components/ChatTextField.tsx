@@ -1,7 +1,7 @@
-import { darkGray, mainWhite } from "@/assets/colors/colors";
+import { darkGray, mainWhite, mainYello } from "@/assets/colors/colors";
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import YellowIconButton from "./YellowIconButton";
+import IconButton from "./IconButton";
 
 export default function ChatTextField(): React.JSX.Element {
   return (
@@ -12,7 +12,7 @@ export default function ChatTextField(): React.JSX.Element {
         style={styles.textInput}
         multiline
       />
-      <YellowIconButton icon="arrow-right" />
+      <IconButton icon="arrow-right" style={{ backgroundColor: mainYello }}  />
     </View>
   );
 }
