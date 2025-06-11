@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: mainGray,
         height: 35,
-        flex: 1,
         borderRadius: 35,
         flexDirection: "row",
         alignItems: "center",
