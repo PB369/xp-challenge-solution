@@ -1,24 +1,63 @@
-import { Button, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import '@/global.css';
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { useUser } from "@/context/UserContex";
+import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
 
 export default function MonthlyAmount() {
+  const { changeUserProperty } = useUser();
   const router = useRouter();
+
+  const options = ['Menos que 5%', 'Entre 5% a 15%', 'Entre 15% e 30%', 'Mais de 30%'];
+
+  const [selected, setSelected] = useState<string | null>(null);
 
   const handleNext = () => {
     router.push('/(tabs)');
   }
 
+  const handleSelected = (option: string) => {
+    setSelected(option);
+    changeUserProperty('monthlyAmount', option);
+  }
+
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+    <View className="flex-1 justify-center items-center bg-black w-full"
     >
-      <Text>Qual parte da sua renda mensal você pode investir?</Text>
-      <Button title="Finalizar" onPress={handleNext}/>
+      <View className="w-4/5 justify-center items-center">
+        <OnboardingProgress currentStep={6}/>
+
+        <Image source={require('@/assets/images/monthlyAmount-image.png')} style={{width: 258, height: 258, marginBottom:16}}/>
+
+        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual parte da sua renda mensal você pode investir?</Text>
+
+        <View className="w-full my-4">
+          {options.map((option) => {
+            return (
+              <Pressable 
+                key={option} onPress={()=>handleSelected(option)} 
+                className={
+                  `border 
+                  bg-zinc-800 
+                    my-2 py-2 px-4 
+                    w-full 
+                    rounded-md`
+                } 
+                style={{
+                  borderColor: selected === option ? '#fff': '#27272a'
+                }}
+              >
+                <Text className="text-white text-justify text-sm">{option}</Text>
+              </Pressable>
+            )
+          })}
+        </View>
+
+          <Pressable onPress={handleNext} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
+          <Text className="text-center text-base font-semibold">Finalizar</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }

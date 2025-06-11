@@ -5,6 +5,6 @@ export type User = {
   goal?: string,
   timeOfInvestment?: string,
   initialAmount?: number,
-  profile?: string,
+  profileAssessment?: string,
   monthlyAmount?: number,
 };

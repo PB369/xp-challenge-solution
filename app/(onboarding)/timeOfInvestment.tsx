@@ -1,36 +1,36 @@
 import { Image, Pressable, Text, View } from "react-native";
 import '@/global.css';
 import { useRouter } from "expo-router";
-import { useUser } from "@/context/UserContex";
 import { useState } from "react";
+import { useUser } from "@/context/UserContex";
 import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
 
-export default function Goal() {
+export default function TimeOfInvestment() {
   const { changeUserProperty } = useUser();
   const router = useRouter();
 
-  const options = ['Garantir minha aposentadoria', 'Comprar um bem de consumo', 'Aumentar meu patrimônio ao longo do tempo', 'Gerar uma renda passiva'];
+  const options = ['Menos de 1 ano', 'De 1 a 2 anos', 'De 3 a 4 anos', 'Mais de 4 anos'];
 
   const [selected, setSelected] = useState<string | null>(null);
 
   const handleNext = () => {
-    router.push('/(onboarding)/timeOfInvestment');
+    router.push('/(onboarding)/initialAmount');
   }
 
   const handleSelected = (option: string) => {
     setSelected(option);
-    changeUserProperty('goal', option);
+    changeUserProperty('timeOfInvestment', option);
   }
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={2}/>
+        <OnboardingProgress currentStep={3}/>
 
-        <Image source={require('@/assets/images/goal-image.png')} style={{width: 286, height: 286, marginBottom:16}}/>
+        <Image source={require('@/assets/images/time-image.png')} style={{width: 248, height: 234, marginBottom:16}}/>
 
-        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual é o seu objetivo financeiro?</Text>
+        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Quanto tempo você pretende deixar o dinheiro investido?</Text>
 
         <View className="w-full my-4">
           {options.map((option) => {
