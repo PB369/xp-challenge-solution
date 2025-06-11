@@ -3,12 +3,17 @@ import { Pressable, StyleSheet, Text } from "react-native";
 
 type Props = {
     text: string,
-    style?: Record<string, any>
+    style?: Record<string, any>,
+    onClick?: () => any
 };
 
-export default function TextButton({ text, style }: Props) {
+export default function TextButton({ text, style, onClick }: Props) {
     return (
-        <Pressable style={{...styles.button, ...style}}>
+        <Pressable onPress={() => {
+            if (onClick) {
+                onClick();
+            }
+        }} style={{...styles.button, ...style}}>
             <Text style={styles.text}>{text}</Text>
         </Pressable>
     );

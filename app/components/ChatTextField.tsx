@@ -1,21 +1,28 @@
-import { darkGray, mainWhite, mainYello } from "@/assets/colors/colors";
+import { darkGray, mainGray, mainWhite, mainYello } from "@/assets/colors/colors";
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import IconButton from "./IconButton";
 
-export default function ChatTextField(): React.JSX.Element {
+type Props = {
+  value?: string;
+  onChangeText?: (text: string) => void;
+};
+
+export default function ChatTextField({ value = "", onChangeText }: Props): React.JSX.Element {
   return (
     <View style={styles.container}>
       <TextInput
         placeholder="Pergunte alguma coisa"
-        placeholderTextColor="#999"
+        placeholderTextColor={mainGray}
         style={styles.textInput}
-        multiline
+        onChangeText={onChangeText}
+        value={value}
       />
-      <IconButton icon="arrow-right" style={{ backgroundColor: mainYello }}  />
+      <IconButton icon="arrow-right" style={{ backgroundColor: mainYello }} />
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

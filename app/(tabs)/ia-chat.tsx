@@ -1,5 +1,6 @@
 import { mainBalck, mainWhite } from '@/assets/colors/colors';
 import '@/global.css';
+import { useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -13,6 +14,13 @@ import Header from '../components/Header';
 import TextButton from '../components/TextButton';
 
 export default function IAChat() {
+
+  const [textValue, setTextValue] = useState("");
+
+  const sugestionValues: Array<string> = ["Crie um plano de investimento para 6 meses", "Estruture minha  carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
+
+  const verticalSugestions: Array<string> = ["Ativos com meu perfil", "Notícias recentes"];
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: mainBalck }}
@@ -23,16 +31,23 @@ export default function IAChat() {
           <Header />
           <View style={styles.verticalSugestions}>
             <Text style={styles.sugestionTitle}>Sobre o que você quer conversar hoje ?</Text>
-            <TextButton text="Crie um plano de investimento para 6 meses" style={styles.verticalSugestionButton} />
-            <TextButton text="Estruture minha  carteira" style={styles.verticalSugestionButton} />
-            <TextButton text="Liste os ativos que estão rendendo mais" style={styles.verticalSugestionButton} />
-            <TextButton text="Crie curso para iniciantes em investimento" style={styles.verticalSugestionButton} />
+            {sugestionValues.map((value: string) => {
+              return <TextButton
+                        key={value}
+                        text={value}
+                        style={styles.verticalSugestionButton}
+                        onClick={() => setTextValue(value)}
+                      />
+
+            })}
           </View>
           <View style={styles.horizontalSugestions}>
-            <TextButton text="Ativos com meu perfil" style={styles.horizontalSugestionButton} />
-            <TextButton text="Notícias recentes" style={styles.horizontalSugestionButton} />
+            {verticalSugestions.map((value: string) => {
+              return (<TextButton key={value} text={value} style={styles.horizontalSugestionButton} onClick={() => setTextValue(value)}/>);
+            })}
+
           </View>
-          <ChatTextField />
+          <ChatTextField value={textValue} onChangeText={setTextValue} />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
