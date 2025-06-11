@@ -8,7 +8,7 @@ export default function Header() {
             <IconButton icon="bars" iconColor={mainWhite} iconSize={25} />
             <IconButton icon="search" iconColor={mainWhite} iconSize={25} />
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
