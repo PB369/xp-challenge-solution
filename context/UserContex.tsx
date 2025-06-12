@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@/utils/userType';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type UserContextType = {
   user: User | null,
@@ -9,8 +10,39 @@ type UserContextType = {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+const USER_STORAGE_KEY = '@user_data';
+
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(()=>{
+    const loadUser = async () => {
+      try {
+        const storedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
+        if(storedUser){
+          setUser(JSON.parse(storedUser));
+        }
+      } catch (error) {
+        console.error('An Error occurred while trying to load the user from AsyncStorage', error)
+      }
+    }
+    loadUser();
+  }, []);
+
+  useEffect(()=>{
+    const saveUser = async () => {
+      try {
+        if(user){
+          await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+        } else {
+          await AsyncStorage.removeItem(USER_STORAGE_KEY);
+        }
+      } catch (error) {
+        console.error('And Error occurred while saving user in AsyncStorage', error);
+      }
+    }
+    saveUser();
+  }, [user]);
 
   const changeUserProperty = (property: keyof User, value: string | number) => {
     if(!user) return;
