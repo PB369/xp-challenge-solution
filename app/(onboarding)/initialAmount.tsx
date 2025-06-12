@@ -23,7 +23,7 @@ export default function InitialAmount() {
       <View className="w-4/5 justify-center items-center">
         <OnboardingProgress currentStep={4}/>
 
-        <Image source={require('@/assets/images/initialAmount-image.png')} style={{width: 300, height: 300, marginBottom:16}}/>
+        <Image source={require('@/assets/images/onboarding-images/initialAmount-image.png')} style={{width: 300, height: 300, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual valor você tem disponível para investir hoje?</Text>
 

@@ -28,7 +28,7 @@ export default function TimeOfInvestment() {
       <View className="w-4/5 justify-center items-center">
         <OnboardingProgress currentStep={3}/>
 
-        <Image source={require('@/assets/images/time-image.png')} style={{width: 248, height: 234, marginBottom:16}}/>
+        <Image source={require('@/assets/images/onboarding-images/time-image.png')} style={{width: 248, height: 234, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Quanto tempo você pretende deixar o dinheiro investido?</Text>
 
