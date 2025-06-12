@@ -4,11 +4,9 @@ import '@/global.css';
 import { Groq } from 'groq-sdk';
 import { useState } from 'react';
 import {
-  Keyboard,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
-  TouchableWithoutFeedback,
   View
 } from "react-native";
 import Chat from '../components/Chat';
@@ -41,7 +39,10 @@ export default function IAChat() {
     Importante:
     - Use linguagem acessível e evite jargões técnicos.
     - Nunca faça recomendações de ativos específicos (ex: ações com ticker), apenas classes.
-    - Seja claro que a conversa é apenas para fins educacionais e não configura uma recomendação financeira real.`
+    - Seja claro que a conversa é apenas para fins educacionais e não configura uma recomendação financeira real.
+    - Mantenha o contexto da conversa, sem repetir ou resumir o que já foi dito.
+    - Foque em responder com base no que o usuário disse por último.
+    - Não repita explicações já dadas anteriormente.` 
   }]);
 
   const [chat, setChat] = useState<Array<Message>>([])
@@ -92,7 +93,6 @@ export default function IAChat() {
       style={{ flex: 1, backgroundColor: mainBalck }}
       behavior={"padding"}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.contentHolder}>
           <Header />
           {chat.length == 0 && <View style={styles.verticalSugestions}>
@@ -116,7 +116,6 @@ export default function IAChat() {
           </View>
           <ChatTextField value={textValue} onChangeText={setTextValue} onSubmit={send} />
         </View>
-      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 }
