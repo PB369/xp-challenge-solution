@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 import '@/global.css';
 import ProgressChart from "@/components/DashboardComponents/ProgressChart/ProgressChart";
 import GoalTracker from "@/components/DashboardComponents/GoalTracker/GoalTracker";
@@ -9,12 +9,12 @@ import WalletInsights from "@/components/DashboardComponents/WalletInsights/Wall
 export default function Dashboard() {
 
   return (
-    <View className="flex-1 justify-center items-center bg-black">
+    <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} className="flex-1 bg-black">
       <ProgressChart/>
       <GoalTracker/>
       <RecommendedWallet/>
       <Alerts/>
       <WalletInsights/>
-    </View>
+    </ScrollView>
   );
 }

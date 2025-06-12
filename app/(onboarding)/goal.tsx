@@ -28,7 +28,7 @@ export default function Goal() {
       <View className="w-4/5 justify-center items-center">
         <OnboardingProgress currentStep={2}/>
 
-        <Image source={require('@/assets/images/goal-image.png')} style={{width: 286, height: 286, marginBottom:16}}/>
+        <Image source={require('@/assets/images/onboarding-images/goal-image.png')} style={{width: 286, height: 286, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual é o seu objetivo financeiro?</Text>
 

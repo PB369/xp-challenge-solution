@@ -2,10 +2,6 @@ import { useState } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { BarChart } from 'react-native-gifted-charts';
 
-type Props = {
-
-}
-
 const screenWidth = Dimensions.get('window').width;
 
 const dataByPeriod = {
@@ -64,16 +60,19 @@ const ProgressChart = () => {
   const spacing = 15;
 
   return (
-   <View className="w-full flex justify-center items-center">
-    <View>
-      <Text className="text-white">Aqui está seu progresso</Text>
+   <View className="w-full flex justify-center items-center my-3">
+    <View className="w-11/12 pb-4 flex flex-row justify-between items-center">
+      <Text className="text-white text-lg">Aqui está seu progresso</Text>
       <Text className="text-white">Ver saldos</Text>
     </View>
-    <View>
-      <Text className="text-white">R$XX,YY</Text>
-      <Text className="text-white">R$XX,YY</Text>
+    <View className="w-11/12 mb-4 flex flex-row justify-between items-center">
+      <View className="flex flex-row justify-center items-center">
+        <Text className="text-white text-2xl font-bold mr-2">$ XX,YY</Text>
+        <Text className="text-[#0DFF00] text-base">+yy%</Text>
+      </View>
+      <Text className="text-[#0DFF00] text-lg font-semibold">$ +XX,YY</Text>
     </View>
-    <View className="flex flex-col justify-center items-center bg-neutral-800 py-8 px-5 rounded-2xl w-11/12">
+    <View className="flex flex-col justify-center items-center bg-neutral-800 py-8 px-5 rounded-lg w-11/12">
       {/* Chart */}
        <BarChart
           data={data}

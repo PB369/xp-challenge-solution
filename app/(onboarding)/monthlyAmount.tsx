@@ -28,7 +28,7 @@ export default function MonthlyAmount() {
       <View className="w-4/5 justify-center items-center">
         <OnboardingProgress currentStep={6}/>
 
-        <Image source={require('@/assets/images/monthlyAmount-image.png')} style={{width: 258, height: 258, marginBottom:16}}/>
+        <Image source={require('@/assets/images/onboarding-images/monthlyAmount-image.png')} style={{width: 258, height: 258, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual parte da sua renda mensal você pode investir?</Text>
 

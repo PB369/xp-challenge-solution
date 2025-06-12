@@ -27,7 +27,7 @@ export default function ProfileAssessment() {
     >
       <View className="w-4/5 justify-center items-center">
         <OnboardingProgress currentStep={5}/>
-        <Image source={require('@/assets/images/profileAssessment-image.png')} style={{width: 276, height: 276, marginBottom:16}}/>
+        <Image source={require('@/assets/images/onboarding-images/profileAssessment-image.png')} style={{width: 276, height: 276, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Como você reagiria se sua carteira caísse 10% em 1 mês?</Text>
 
