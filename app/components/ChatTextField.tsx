@@ -6,9 +6,10 @@ import IconButton from "./IconButton";
 type Props = {
   value?: string;
   onChangeText?: (text: string) => void;
+  onSubmit?: () => void;
 };
 
-export default function ChatTextField({ value = "", onChangeText }: Props): React.JSX.Element {
+export default function ChatTextField({ value = "", onChangeText, onSubmit }: Props): React.JSX.Element {
   return (
     <View style={styles.container}>
       <TextInput
@@ -18,7 +19,11 @@ export default function ChatTextField({ value = "", onChangeText }: Props): Reac
         onChangeText={onChangeText}
         value={value}
       />
-      <IconButton icon="arrow-right" style={{ backgroundColor: mainYello }} />
+      <IconButton icon="arrow-right" style={{ backgroundColor: mainYello }} onClick={() => {
+        if (onSubmit) {
+          onSubmit();
+        }
+      }} />
     </View>
   );
 }

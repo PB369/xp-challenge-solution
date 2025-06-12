@@ -1,5 +1,7 @@
 import { mainBalck, mainWhite } from '@/assets/colors/colors';
+import { Message } from '@/assets/types/messages';
 import '@/global.css';
+import { Groq } from 'groq-sdk';
 import { useState } from 'react';
 import {
   Keyboard,
@@ -9,9 +11,11 @@ import {
   TouchableWithoutFeedback,
   View
 } from "react-native";
+import Chat from '../components/Chat';
 import ChatTextField from '../components/ChatTextField';
 import Header from '../components/Header';
 import TextButton from '../components/TextButton';
+
 
 export default function IAChat() {
 
@@ -21,6 +25,68 @@ export default function IAChat() {
 
   const verticalSugestions: Array<string> = ["Ativos com meu perfil", "Notícias recentes"];
 
+  const [messages, setMessages] = useState<Array<Message>>([{
+    role: "system",
+    content: `Você é um assistente financeiro especializado em montar carteiras de investimentos personalizadas. Seu objetivo é entender o perfil do usuário antes de sugerir qualquer investimento. 
+
+    Siga este processo:
+    1. Cumprimente a pessoa de forma profissional e amigável.
+    2. Pergunte sobre o perfil de risco do usuário: conservador, moderado ou arrojado. Se ele não souber, ajude com perguntas (ex: 'Como você se sente ao ver seu investimento oscilar?', 'Você prefere segurança ou maior rentabilidade?').
+    3. Pergunte o objetivo do investimento (ex: aposentadoria, comprar casa, independência financeira, reserva de emergência).
+    4. Pergunte qual o valor disponível para investir.
+    5. Com base nas respostas, monte uma carteira com uma distribuição percentual recomendada entre ativos como: Renda Fixa, Fundos Imobiliários, Ações, Fundos de Investimento, Tesouro Direto, Criptoativos (apenas se o perfil for arrojado).
+    6. Explique de forma simples e clara o motivo de cada classe de ativo na carteira.
+    7. Pergunte se o usuário gostaria de sugestões de ajustes ou rebalanceamento mensal ou anual.
+
+    Importante:
+    - Use linguagem acessível e evite jargões técnicos.
+    - Nunca faça recomendações de ativos específicos (ex: ações com ticker), apenas classes.
+    - Seja claro que a conversa é apenas para fins educacionais e não configura uma recomendação financeira real.`
+  }]);
+
+  const [chat, setChat] = useState<Array<Message>>([])
+
+  const send = async () => {
+
+    try {
+      const groq = new Groq({
+        apiKey: "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"
+      });
+
+      const message: Message =  {role: "user", content: textValue }
+
+      const messagesArray: Array<Message> = [...messages, message];
+
+      const chatMessages: Array<Message> = [...chat, message];
+      
+      setChat(chatMessages);
+
+      setTextValue("");
+
+      const chatCompletion = await groq.chat.completions.create({
+        "messages": messagesArray as Groq.Chat.Completions.ChatCompletionMessageParam[],
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "temperature": 1,
+        "max_completion_tokens": 1024,
+        "top_p": 1,
+        "stream": false,
+        "stop": null
+      });
+
+      const aiMessage: Message = { role: "system", content: chatCompletion.choices[0].message.content as string};
+
+      chatMessages.push(aiMessage);
+      messagesArray.push(aiMessage);
+
+      setChat(chatMessages);
+      setMessages(messagesArray);
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: mainBalck }}
@@ -29,25 +95,26 @@ export default function IAChat() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.contentHolder}>
           <Header />
-          <View style={styles.verticalSugestions}>
+          {chat.length == 0 && <View style={styles.verticalSugestions}>
             <Text style={styles.sugestionTitle}>Sobre o que você quer conversar hoje ?</Text>
             {sugestionValues.map((value: string) => {
               return <TextButton
-                        key={value}
-                        text={value}
-                        style={styles.verticalSugestionButton}
-                        onClick={() => setTextValue(value)}
-                      />
+                key={value}
+                text={value}
+                style={styles.verticalSugestionButton}
+                onClick={() => setTextValue(value)}
+              />
 
             })}
-          </View>
+          </View>}
+          {chat.length > 0 && <Chat messages={chat} />}
           <View style={styles.horizontalSugestions}>
             {verticalSugestions.map((value: string) => {
-              return (<TextButton key={value} text={value} style={styles.horizontalSugestionButton} onClick={() => setTextValue(value)}/>);
+              return (<TextButton key={value} text={value} style={styles.horizontalSugestionButton} onClick={() => setTextValue(value)} />);
             })}
 
           </View>
-          <ChatTextField value={textValue} onChangeText={setTextValue} />
+          <ChatTextField value={textValue} onChangeText={setTextValue} onSubmit={send} />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -56,13 +123,13 @@ export default function IAChat() {
 
 const styles = StyleSheet.create({
   horizontalSugestions: {
-    paddingHorizontal: 10, 
+    paddingHorizontal: 10,
     paddingVertical: 5,
     flexDirection: "row",
     justifyContent: "space-between",
-  }, 
+  },
   verticalSugestions: {
-    flexDirection: "column", 
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     flex: 1
