@@ -1,42 +1,54 @@
 import { Image, Pressable, Text, View } from "react-native";
 import '@/global.css';
 import { useRouter } from "expo-router";
-import { useUser } from "@/context/UserContex";
 import { useState } from "react";
+import { useUser } from "@/context/UserContex";
 import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
 
-export default function Goal() {
+export default function ProfileAssessment() {
   const { changeUserProperty } = useUser();
   const router = useRouter();
 
-  const options = ['Garantir minha aposentadoria', 'Comprar um bem de consumo', 'Crescer meu patrimônio aos poucos', 'Gerar uma renda passiva'];
+  const options = [
+    {
+      content: 'Ficaria muito preocupado e sacaria o dinheiro',
+      profileType: 'Conservador',
+    },
+    {
+      content: 'Ficaria inseguro, mas manteria o investimento',
+      profileType: 'Moderado',
+    },
+    {
+      content: 'Aproveitaria para investir mais',
+      profileType: 'Agressivo',
+    },
+  ];
 
   const [selected, setSelected] = useState<string | null>(null);
 
   const handleNext = () => {
-    router.push('/(onboarding)/timeOfInvestment');
+    router.push('/(onboarding)/monthlyAmount');
   }
 
-  const handleSelected = (option: string) => {
-    setSelected(option);
-    changeUserProperty('goal', option);
+  const handleSelected = (option: {content: string, profileType: string}) => {
+    setSelected(option.content);
+    changeUserProperty('profileAssessment', option.profileType);
   }
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={2}/>
+        <OnboardingProgress currentStep={5}/>
+        <Image source={require('@/assets/images/onboarding-images/profileAssessment-image.png')} style={{width: 276, height: 276, marginBottom:16}}/>
 
-        <Image source={require('@/assets/images/onboarding-images/goal-image.png')} style={{width: 286, height: 286, marginBottom:16}}/>
-
-        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual é o seu objetivo financeiro?</Text>
+        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Como você reagiria se sua carteira caísse 10% em 1 mês?</Text>
 
         <View className="w-full my-4">
           {options.map((option) => {
             return (
               <Pressable 
-                key={option} onPress={()=>handleSelected(option)} 
+                key={option.content} onPress={()=>handleSelected(option)} 
                 className={
                   `border 
                   bg-zinc-800 
@@ -45,10 +57,10 @@ export default function Goal() {
                     rounded-md`
                 } 
                 style={{
-                  borderColor: selected === option ? '#fff': '#27272a'
+                  borderColor: selected === option.content ? '#fff': '#27272a'
                 }}
               >
-                <Text className="text-white text-justify text-sm">{option}</Text>
+                <Text className="text-white text-justify text-sm">{option.content}</Text>
               </Pressable>
             )
           })}

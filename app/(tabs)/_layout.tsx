@@ -7,8 +7,8 @@ import { StyleSheet, Text, View } from "react-native";
 export default function TabsLayout() {
   const { isAuthenticated } = useAuth();
 
-  if (!isAuthenticated) {
-    return <Redirect href="/register" />;
+  if(!isAuthenticated){
+    return <Redirect href='/login'/>
   }
 
   return (

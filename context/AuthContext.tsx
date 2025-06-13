@@ -1,13 +1,9 @@
+import { User } from "@/utils/userType";
 import { createContext, ReactNode, useContext, useState } from "react";
-
-type User = {
-  username: string,
-  password: string,
-}
+import { useUser } from "./UserContex";
 
 type AuthContextType = {
   isAuthenticated: boolean,
-  user: User | null,
   register: (userData: User) => void,
   login: (username: string, password: string) => boolean;
   logout: () => void,
@@ -16,16 +12,23 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-  const register = (userData: User) => {
-    setUser(userData);
+  const register = (userAuthData: User) => {
+    const newUser = {
+        ...userAuthData,
+        isAuthenticated: false,
+        isFirstAccess: true,
+    }
+    setUser(newUser);
     setIsAuthenticated(false);
   };
 
   const login = (username: string, password: string) => {
     if(user && user.username === username && user.password === password){
+      const updatedUser = { ...user, isAuthenticated: true }
+      setUser(updatedUser);
       setIsAuthenticated(true);
       return true;
     } 
@@ -35,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => setIsAuthenticated(false);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, register, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
