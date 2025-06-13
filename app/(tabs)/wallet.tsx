@@ -4,6 +4,7 @@ import WalletResume from "@/components/WalletPageComponents/WalletResume/WalletR
 import WalletPieChart from "@/components/WalletPageComponents/WalletPieChart/WalletPieChart";
 import FinancialAssets from "@/components/WalletPageComponents/FinancialAssets/FinancialAssets";
 import BenchmarkComparison from "@/components/WalletPageComponents/BenchmarkComparison/BenchmarkComparison";
+import ProfileAlignment from "@/components/WalletPageComponents/ProfileAlignment/ProfileAlignment";
 
 export default function Wallet() {
   return (
@@ -16,6 +17,7 @@ export default function Wallet() {
       <WalletPieChart/>
       <FinancialAssets/>
       <BenchmarkComparison/>
+      <ProfileAlignment/>
     </ScrollView>
   );
 }

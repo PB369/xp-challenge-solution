@@ -41,7 +41,7 @@ const WalletResume = () => {
           <Image source={require('@/assets/images/icons/profileV1-icon.png')} style={{width: 20, height: 20}}/>
           <Text className="text-white font-medium ml-2">Perfil:</Text>
         </View>
-        <Text className="text-white">Moderado</Text>
+        <Text className="text-black px-3 rounded-md bg-yellow-400">{user?.profileAssessment}</Text>
       </View>
       <View className="flex flex-row w-full py-3 px-2 justify-between items-center">
         <View className="flex flex-row justify-center items-center">
