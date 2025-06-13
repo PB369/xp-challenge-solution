@@ -6,7 +6,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: "Oops! This screen doesn't exist." }} />
       <View>
-        <Link href="/(tabs)/index">Go to Home</Link>
+        <Link href="/(tabs)">Go to Home</Link>
       </View>
     </>
   );

@@ -1,26 +1,9 @@
-import { Pressable, Text, View } from "react-native"
+import { assets } from "@/utils/mockedData/mockedAssets";
+import { Link } from "expo-router";
+import { Text, View } from "react-native";
 
 const FinancialAssets = () => {
-  const assets = [
-    {
-      name: 'Tesouro IPCA + 2025',
-      class: 'Renda fixa',
-      profitability: '+5.9%',
-      liquidity: 'D-1',
-    },
-    {
-      name: 'Tesouro Selic 2027',
-      class: 'Renda fixa',
-      profitability: '+3.4%',
-      liquidity: 'D+1',
-    },
-    {
-      name: 'Tesouro Direto Prefixado',
-      class: 'Renda fixa',
-      profitability: '+2.8%',
-      liquidity: 'D+1',
-    },
-  ];
+  
 
   return (
     <View className="w-11/12 flex justify-center items-center my-3">
@@ -40,9 +23,15 @@ const FinancialAssets = () => {
             <Text className="text-white">Liquidez:</Text>
             <Text className="text-white">{asset.liquidity}</Text>
           </View>
-          <Pressable className="bg-black mt-2 py-1 px-5 rounded-lg self-end">
-            <Text className="text-white">Ver explicação</Text>
-          </Pressable>
+          <Link 
+            href={{
+              pathname: '/assetExplanation/[id]',
+              params: { id: JSON.stringify(asset) }
+            }}  
+            className="bg-black mt-2 py-1 px-5 rounded-lg self-end text-white"
+          >
+            Ver explicação
+          </Link>
         </View>
       ))}
     </View>
