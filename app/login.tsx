@@ -31,8 +31,7 @@ export default function Login() {
   }
 
   return (
-    <View className="flex-1 justify-center items-center bg-black w-full"
-    >
+    <View className="flex-1 justify-center items-center bg-black w-full">
       <View className="w-4/5 justify-center items-center">
         <Text className="text-white text-2xl font-semibold">Login</Text>
         <TextInput onChangeText={setUsername} value={username} placeholder="Username"

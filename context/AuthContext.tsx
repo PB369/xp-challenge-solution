@@ -1,4 +1,4 @@
-import { User } from "@/utils/userType";
+import { User } from "@/utils/types/userType";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useUser } from "./UserContex";
 
