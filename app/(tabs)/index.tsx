@@ -1,10 +1,10 @@
-import { ScrollView } from "react-native";
-import '@/global.css';
-import ProgressChart from "@/components/DashboardPageComponents/ProgressChart/ProgressChart";
-import GoalTracker from "@/components/DashboardPageComponents/GoalTracker/GoalTracker";
-import RecommendedWallet from "@/components/DashboardPageComponents/RecommendedWallet/RecommendedWallet";
 import Alerts from "@/components/DashboardPageComponents/Alerts/Alerts";
+import GoalTracker from "@/components/DashboardPageComponents/GoalTracker/GoalTracker";
+import ProgressChart from "@/components/DashboardPageComponents/ProgressChart/ProgressChart";
+import RecommendedWallet from "@/components/DashboardPageComponents/RecommendedWallet/RecommendedWallet";
 import WalletInsights from "@/components/DashboardPageComponents/WalletInsights/WalletInsights";
+import '@/global.css';
+import { ScrollView } from "react-native";
 
 export default function Dashboard() {
 
