@@ -16,12 +16,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   const register = (userAuthData: User) => {
-    setUser(prev => ({...prev, ...userAuthData}));
+    const newUser = {
+        ...userAuthData,
+        isAuthenticated: false,
+        isFirstAccess: true,
+    }
+    setUser(newUser);
     setIsAuthenticated(false);
   };
 
   const login = (username: string, password: string) => {
     if(user && user.username === username && user.password === password){
+      const updatedUser = { ...user, isAuthenticated: true }
+      setUser(updatedUser);
       setIsAuthenticated(true);
       return true;
     } 
