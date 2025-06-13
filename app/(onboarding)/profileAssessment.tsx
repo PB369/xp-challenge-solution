@@ -9,7 +9,20 @@ export default function ProfileAssessment() {
   const { changeUserProperty } = useUser();
   const router = useRouter();
 
-  const options = ['Ficaria muito preocupado e sacaria o dinheiro', 'Ficaria inseguro, mas manteria o investimento', 'Aproveitaria para investir mais', 'Já estou acostumado com oscilações'];
+  const options = [
+    {
+      content: 'Ficaria muito preocupado e sacaria o dinheiro',
+      profileType: 'Conservador',
+    },
+    {
+      content: 'Ficaria inseguro, mas manteria o investimento',
+      profileType: 'Moderado',
+    },
+    {
+      content: 'Aproveitaria para investir mais',
+      profileType: 'Agressivo',
+    },
+  ];
 
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -17,9 +30,9 @@ export default function ProfileAssessment() {
     router.push('/(onboarding)/monthlyAmount');
   }
 
-  const handleSelected = (option: string) => {
-    setSelected(option);
-    changeUserProperty('profileAssessment', option);
+  const handleSelected = (option: {content: string, profileType: string}) => {
+    setSelected(option.content);
+    changeUserProperty('profileAssessment', option.profileType);
   }
 
   return (
@@ -35,7 +48,7 @@ export default function ProfileAssessment() {
           {options.map((option) => {
             return (
               <Pressable 
-                key={option} onPress={()=>handleSelected(option)} 
+                key={option.content} onPress={()=>handleSelected(option)} 
                 className={
                   `border 
                   bg-zinc-800 
@@ -44,10 +57,10 @@ export default function ProfileAssessment() {
                     rounded-md`
                 } 
                 style={{
-                  borderColor: selected === option ? '#fff': '#27272a'
+                  borderColor: selected === option.content ? '#fff': '#27272a'
                 }}
               >
-                <Text className="text-white text-justify text-sm">{option}</Text>
+                <Text className="text-white text-justify text-sm">{option.content}</Text>
               </Pressable>
             )
           })}

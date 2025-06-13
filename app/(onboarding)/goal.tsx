@@ -9,7 +9,7 @@ export default function Goal() {
   const { changeUserProperty } = useUser();
   const router = useRouter();
 
-  const options = ['Garantir minha aposentadoria', 'Comprar um bem de consumo', 'Aumentar meu patrimônio ao longo do tempo', 'Gerar uma renda passiva'];
+  const options = ['Garantir minha aposentadoria', 'Comprar um bem de consumo', 'Crescer meu patrimônio aos poucos', 'Gerar uma renda passiva'];
 
   const [selected, setSelected] = useState<string | null>(null);
 

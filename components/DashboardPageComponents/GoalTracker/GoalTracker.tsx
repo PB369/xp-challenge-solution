@@ -12,20 +12,18 @@ const GoalTracker = () => {
         <Text className="text-white text-lg"><Text className="font-bold">Meta:</Text> {user?.goal}</Text>
         <Text className="my-2 text-base text-white">Valor alvo: <Text className="font-bold">Indefinido</Text></Text>
       </View>
-      <View className="flex w-11/12 justify-center items-center">
-        <View className="w-full px-2">
-          <ProgressBar progressPercentage={10}>
-            <View className="flex">
-              <Image source={require('@/assets/images/icons/flagCheck-icon.png')}/>
-              <Text className="text-white font-bold text-base">10%</Text>
-            </View>
-          </ProgressBar>
-        </View>
-        <Pressable className="bg-yellow-400 px-3 pl-6 flex flex-row justify-evenly items-center rounded-lg self-end">
-          <Text className="text-black mr-2">Editar</Text>
-          <Octicons name="pencil" size={16} color="black" />
-        </Pressable>
+      <View className="w-full">
+        <ProgressBar progressPercentage={10} widthInPercentage={88}>
+          <View className="flex ml-4">
+            <Image source={require('@/assets/images/icons/flagCheck-icon.png')}/>
+            <Text className="text-white font-bold text-base">10%</Text>
+          </View>
+        </ProgressBar>
       </View>
+      <Pressable className="bg-yellow-400 px-3 pl-6 mt-4 flex flex-row justify-evenly items-center rounded-lg self-end">
+        <Text className="text-black mr-2">Editar</Text>
+        <Octicons name="pencil" size={16} color="black" />
+      </Pressable>
     </View>
   )
 }
