@@ -3,9 +3,11 @@ import '@/global.css'
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useUser } from "@/context/UserContex";
 
 export default function Login() {
   const { login } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
 
   const [username, setUsername] = useState<string>('');
@@ -17,8 +19,12 @@ export default function Login() {
     setShowErrorMessage(false);
     const isLoginSuccessful = login(username, password);
 
-    if(isLoginSuccessful){
-      router.replace('/(onboarding)/start');
+    if(isLoginSuccessful && user){
+      if(user.isFirstAccess){
+        router.replace('/(onboarding)/start');
+      } else {
+        router.replace('/(tabs)');
+      }
     } else {
       setShowErrorMessage(true);
     }

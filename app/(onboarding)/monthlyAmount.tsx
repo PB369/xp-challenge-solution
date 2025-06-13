@@ -13,8 +13,9 @@ export default function MonthlyAmount() {
 
   const [selected, setSelected] = useState<string | null>(null);
 
-  const handleNext = () => {
-    router.push('/(tabs)');
+  const handleFinish = () => {
+    changeUserProperty('isFirstAccess', false);
+    router.replace('/(tabs)');
   }
 
   const handleSelected = (option: string) => {
@@ -54,7 +55,7 @@ export default function MonthlyAmount() {
           })}
         </View>
 
-          <Pressable onPress={handleNext} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
+          <Pressable onPress={handleFinish} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
           <Text className="text-center text-base font-semibold">Finalizar</Text>
         </Pressable>
       </View>
