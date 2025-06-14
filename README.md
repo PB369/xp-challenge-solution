@@ -56,7 +56,6 @@ yarn expo start
 Press a | open Android
 Press i | open iOS simulator
 Press w | open web
-# Ou abra o aplicativo através do QR Code do app Expo Go
 ```
 
 ## 🔐 Licença
