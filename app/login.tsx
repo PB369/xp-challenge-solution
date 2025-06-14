@@ -38,7 +38,7 @@ export default function Login() {
       </View>
       <View className="w-4/5 justify-center items-center">
         <Text className="text-white text-2xl font-semibold">Login</Text>
-        <TextInput onChangeText={setUsername} value={username} placeholder="Username"
+        <TextInput onChangeText={setUsername} value={username} placeholder="Nome"
           className="py-2 px-2 my-4 bg-zinc-800 text-white text-base  rounded-md w-full placeholder:text-white"
         />
         <TextInput onChangeText={setPassword} value={password} placeholder="Senha" secureTextEntry
