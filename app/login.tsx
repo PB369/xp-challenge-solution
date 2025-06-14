@@ -1,4 +1,4 @@
-import { Pressable, Text, TextInput, View } from "react-native";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
 import '@/global.css'
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
@@ -32,6 +32,10 @@ export default function Login() {
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full">
+      <View className="flex flex-row justify-center items-center w-11/12">
+        <Image source={require('@/assets/images/logos/xp-logo.png')} style={{width:'25%'}} resizeMode="contain"/>
+        <Image source={require('@/assets/images/logos/investyou-logo.png')} style={{width:'50%'}} resizeMode="contain"/>
+      </View>
       <View className="w-4/5 justify-center items-center">
         <Text className="text-white text-2xl font-semibold">Login</Text>
         <TextInput onChangeText={setUsername} value={username} placeholder="Username"
@@ -47,7 +51,7 @@ export default function Login() {
           <Text className="text-center text-base font-semibold text-white underline">Criar minha conta</Text>
         </Pressable>
         {showErrorMessage && (
-            <Text className="text-white">Credenciais inválidas! Tente novamente.</Text>
+            <Text className="text-red-400">Credenciais inválidas! Tente novamente.</Text>
         )}
       </View>
     </View>

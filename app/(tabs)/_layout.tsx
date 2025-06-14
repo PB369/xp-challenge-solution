@@ -5,7 +5,8 @@ import { Redirect, Tabs } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import '@/global.css'
 import PageHeader from "@/components/PageHeader/PageHeader";
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function TabsLayout() {
   const { isAuthenticated } = useAuth();
@@ -22,14 +23,14 @@ export default function TabsLayout() {
         tabBarStyle: styles.tabs,
         headerStyle: styles.header,
         headerTitle: () => <PageHeader/>,
-        headerTitleAlign: 'center',
+        headerTitleAlign: 'left',
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="home" size={20} color={color} />
+            <FontAwesome6 name="house" size={20} color={color} />
           ),
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>
@@ -45,7 +46,7 @@ export default function TabsLayout() {
         name="ia-chat"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="comments" size={20} color={color} />
+            <MaterialIcons name="chat" size={24} color={color}/>
           ),
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>

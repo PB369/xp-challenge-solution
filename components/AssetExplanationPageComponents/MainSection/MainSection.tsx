@@ -8,6 +8,7 @@ type Props = {
 }
 
 const MainSection = ({asset}: Props) => {
+
   return (
     <View className="my-8">
       <View className="flex flex-row justify-start items-center">
@@ -21,6 +22,7 @@ const MainSection = ({asset}: Props) => {
             key={asset.tags.indexOf(tag)}
             className={`bg-neutral-700 border py-1 px-2 rounded-lg mr-3 mb-3`}
           >
+            
             <Text className="text-white">{tag.content}</Text>
           </View>
         ))}

@@ -1,6 +1,7 @@
 export type User = {
   username?: string,
   password?: string,
+  email?: string,
   isFirstAccess?: boolean,
   isAuthenticated?: boolean,
   experience?: string,
