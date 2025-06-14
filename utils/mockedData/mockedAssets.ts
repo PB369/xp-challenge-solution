@@ -8,7 +8,7 @@ export const assets: Asset[] = [
     liquidity: 'D-1',
     walletPercentage: '30%',
     minValue: '1000',
-    justification: 'Selecionamos o Tesouro 1pca+ 2029 para sua carteira porque ele oferece proteção contra a inflação possui baixo risco de crédito e é compatível com seu objetivo de longo prazo.',
+    justification: 'Selecionamos o Tesouro IPCA+ 2029 para sua carteira porque ele oferece proteção contra a inflação possui baixo risco de crédito e é compatível com seu objetivo de longo prazo.',
     tags: [
       {
         iconName: 'checkV1-icon.png',

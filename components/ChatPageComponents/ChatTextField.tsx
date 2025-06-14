@@ -14,7 +14,7 @@ export default function ChatTextField({ value = "", onChangeText, onSubmit }: Pr
     <View style={styles.container}>
       <TextInput
         placeholder="Pergunte alguma coisa"
-        placeholderTextColor={mainGray}
+        placeholderTextColor='#b1b1b1'
         style={styles.textInput}
         onChangeText={onChangeText}
         value={value}

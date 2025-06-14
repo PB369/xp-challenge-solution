@@ -1,5 +1,8 @@
 import { mainBalck, mainWhite } from '@/assets/colors/colors';
 import { Message } from '@/assets/types/messages';
+import Chat from '@/components/ChatPageComponents/Chat';
+import ChatTextField from '@/components/ChatPageComponents/ChatTextField';
+import TextButton from '@/components/ChatPageComponents/TextButton';
 import '@/global.css';
 import { Groq } from 'groq-sdk';
 import { useState } from 'react';
@@ -9,21 +12,17 @@ import {
   Text,
   View
 } from "react-native";
-import Chat from '../components/Chat';
-import ChatTextField from '../components/ChatTextField';
-import Header from '../components/Header';
-import TextButton from '../components/TextButton';
+
 
 
 export default function IAChat() {
-
   const [textValue, setTextValue] = useState("");
 
-  const sugestionValues: Array<string> = ["Crie um plano de investimento para 6 meses", "Estruture minha  carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
+  const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Estruture minha carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
 
-  const verticalSugestions: Array<string> = ["Ativos com meu perfil", "Notícias recentes"];
+  const verticalSugestions: string[] = ["Ativos com meu perfil", "Notícias recentes"];
 
-  const [messages, setMessages] = useState<Array<Message>>([{
+  const [messages, setMessages] = useState<Message[]>([{
     role: "system",
     content: `Você é um assistente financeiro especializado em montar carteiras de investimentos personalizadas. Seu objetivo é entender o perfil do usuário antes de sugerir qualquer investimento. 
 
@@ -45,7 +44,7 @@ export default function IAChat() {
     - Não repita explicações já dadas anteriormente.` 
   }]);
 
-  const [chat, setChat] = useState<Array<Message>>([])
+  const [chat, setChat] = useState<Message[]>([])
 
   const send = async () => {
 
@@ -56,9 +55,9 @@ export default function IAChat() {
 
       const message: Message =  {role: "user", content: textValue }
 
-      const messagesArray: Array<Message> = [...messages, message];
+      const messagesArray: Message[] = [...messages, message];
 
-      const chatMessages: Array<Message> = [...chat, message];
+      const chatMessages: Message[] = [...chat, message];
       
       setChat(chatMessages);
 
@@ -94,9 +93,8 @@ export default function IAChat() {
       behavior={"padding"}
     >
         <View style={styles.contentHolder}>
-          <Header />
-          {chat.length == 0 && <View style={styles.verticalSugestions}>
-            <Text style={styles.sugestionTitle}>Sobre o que você quer conversar hoje ?</Text>
+          {chat.length === 0 && <View style={styles.verticalSugestions}>
+            <Text style={styles.sugestionTitle}>Sobre o que você quer conversar hoje?</Text>
             {sugestionValues.map((value: string) => {
               return <TextButton
                 key={value}
@@ -112,7 +110,6 @@ export default function IAChat() {
             {verticalSugestions.map((value: string) => {
               return (<TextButton key={value} text={value} style={styles.horizontalSugestionButton} onClick={() => setTextValue(value)} />);
             })}
-
           </View>
           <ChatTextField value={textValue} onChangeText={setTextValue} onSubmit={send} />
         </View>

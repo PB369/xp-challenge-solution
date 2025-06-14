@@ -14,7 +14,7 @@ const RecommendedWallet = () => {
     <View className="w-full my-2 flex flex-row justify-around items-center">
       <View className="mr-2 w-4/5">
         <Text className="text-white text-sm text-justify">Sugestão baseada no seu perfil de risco e objetivo.</Text>
-        <Text className="text-white text-sm">Última atualização: xx/xx/xxxx</Text>
+        <Text className="text-white text-sm">Última atualização: 17/06/2025</Text>
       </View>
       <Pressable onPress={() => router.push('/(tabs)/wallet')}>
         <Image source={require('@/assets/images/icons/arrowCircleRight-icon.png')} style={{ width: 48, height: 48 }}/>

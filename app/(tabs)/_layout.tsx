@@ -3,6 +3,9 @@ import { useAuth } from "@/context/AuthContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
+import '@/global.css'
+import PageHeader from "@/components/PageHeader/PageHeader";
+
 
 export default function TabsLayout() {
   const { isAuthenticated } = useAuth();
@@ -16,15 +19,17 @@ export default function TabsLayout() {
       screenOptions={{
         tabBarActiveTintColor: mainYello,
         tabBarInactiveTintColor: mainWhite,
-        headerShown: false,
-        tabBarStyle: styles.tabs
+        tabBarStyle: styles.tabs,
+        headerStyle: styles.header,
+        headerTitle: () => <PageHeader/>,
+        headerTitleAlign: 'center',
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="home" size={size} color={color} />
+            <FontAwesome5 name="home" size={20} color={color} />
           ),
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>
@@ -40,7 +45,7 @@ export default function TabsLayout() {
         name="ia-chat"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="comments" size={size} color={color} />
+            <FontAwesome5 name="comments" size={20} color={color} />
           ),
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>
@@ -56,7 +61,7 @@ export default function TabsLayout() {
         name="wallet"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome5 name="wallet" size={size} color={color} />
+            <FontAwesome5 name="wallet" size={20} color={color} />
           ),
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>
@@ -75,7 +80,16 @@ export default function TabsLayout() {
 const styles = StyleSheet.create({
   tabs: {
     backgroundColor: mainBalck,
-    borderTopWidth: 0,
+    height: 90,
+    paddingTop: 5,
+    borderTopWidth: 1,
+    borderBottomColor: mainWhite,
+  },
+  header: {
+    backgroundColor:mainBalck,
+    height: 90,
+    borderBottomWidth: 1,
+    borderBottomColor: mainWhite,
   },
   underline: {
     height: 1,

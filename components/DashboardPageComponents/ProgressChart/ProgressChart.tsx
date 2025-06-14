@@ -67,10 +67,10 @@ const ProgressChart = () => {
     </View>
     <View className="w-11/12 mb-4 flex flex-row justify-between items-center">
       <View className="flex flex-row justify-center items-center">
-        <Text className="text-white text-2xl font-bold mr-2">$ XX,YY</Text>
-        <Text className="text-[#0DFF00] text-base">+yy%</Text>
+        <Text className="text-white text-3xl font-bold mr-2">$ 18.567</Text>
+        <Text className="text-[#0DFF00] text-base font-semibold">+14%</Text>
       </View>
-      <Text className="text-[#0DFF00] text-lg font-semibold">$ +XX,YY</Text>
+      <Text className="text-[#0DFF00] text-xl font-semibold">$ +2599.38</Text>
     </View>
     <View className="flex flex-col justify-center items-center bg-neutral-800 py-8 px-5 rounded-lg w-11/12">
       {/* Chart */}
