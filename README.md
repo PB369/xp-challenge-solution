@@ -1,6 +1,8 @@
 # 💼 InvestYOU
 
-O InvestYOU é app focado para ser um assistente de investimentos conversacional, que se utiliza de uma IA local para oferecer uma experiência de investimento **personalizada**, **automática** e **segura**.
+O InvestYOU é um app focado para ser um assistente de investimentos conversacional, que se utiliza de uma IA local para oferecer uma experiência de investimento **personalizada**, **automática** e **segura**. 
+
+Ele também é destinado para automatizar e facilitar a geração de carteiras de investimentos, tornando o processo de investir mais acessível e amigável, especialmente para os que tem pouca experiência na área.
 
 ## 🎯 Objetivos do Aplicativo
 
@@ -58,4 +60,4 @@ Press w | open web
 
 ## 🔐 Licença
 
-Este projeto é de caráter educacional/prototipal apenas. O uso comercial deste repositório não está autorizado em nenhuma circunstância.
+Este projeto é de caráter educacional apenas. O uso comercial deste repositório não está autorizado em nenhuma circunstância.
