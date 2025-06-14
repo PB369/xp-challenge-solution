@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# 💼 InvestYOU
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+O InvestYOU é app focado para ser um assistente de investimentos conversacional, que se utiliza de uma IA local para oferecer uma experiência de investimento **personalizada**, **automática** e **segura**.
 
-## Get started
+---
 
-1. Install dependencies
+## 🎯 Objetivos do Aplicativo
 
-   ```bash
-   npm install
-   ```
+- Identificar o perfil do investidor de forma simples e descontraída.
+- Sugerir carteiras de investimento sob medida, baseado no perfil de investimento, objetivos do usuário e disponibilidade financeira.
+- Acompanhar o comportamento do usuário e adaptar as recomendações ao longo do tempo.
+- Auxiliar o usuário em diversas necessidades, com uma experiência fluida e conversacional, por meio de um **chat inteligente**.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## 📦 Tecnologias Utilizadas
 
-In the output, you'll find options to open the app in a
+- **React Native** com **Expo**
+- **TypeScript**
+- **Expo Router**
+- **Context API**
+- **Tailwind CSS via `nativewind`**
+- **Modelo de IA Generativa**
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📜 Como executar o projeto
 
-## Get a fresh project
+Siga os passos abaixo para rodar o projeto localmente:
 
-When you're ready, run:
+### Pré-requisitos
+
+Antes de começar, você vai precisar ter instalado em sua máquina:
+
+- [Node.js](https://nodejs.org)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Git](https://git-scm.com/)
+- Um gerenciador de pacotes como npm ou yarn
+
+### Passo a passo
 
 ```bash
-npm run reset-project
+# 1. Clone o repositório:
+git clone [url-do-repositório]
+
+# 2. Acesse a pasta do projeto:
+cd [nome-repositorio]
+
+# 3. Instale as dependências:
+npm install
+# ou
+yarn install
+
+# 4. Inicie o servidor Expo:
+npx expo start
+# ou
+yarn expo start
+
+# 5. Escolha o ambiente de execução com base no seguinte menu que aparecerá:
+Press a | open Android
+Press i | open iOS simulator
+Press w | open web
 ```
+---
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 🔐 Licença
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Este projeto é de caráter educacional/prototipal apenas. O uso comercial deste repositório não está autorizado em nenhuma circunstância.
