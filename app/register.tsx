@@ -37,8 +37,7 @@ export default function Register() {
   return (
     <View className="flex-1 justify-center items-center bg-black w-full">
       <View className="w-4/5 justify-center items-center">
-        <View className="flex flex-row justify-center items-center w-11/12">
-          <Image source={require('@/assets/images/logos/xp-logo.png')} style={{width:'25%'}} resizeMode="contain"/>
+        <View className="flex flex-row justify-center items-center w-11/12 mb-10">
           <Image source={require('@/assets/images/logos/investyou-logo.png')} style={{width:'50%'}} resizeMode="contain"/>
         </View>
         <Text className="text-white text-2xl font-semibold">Crie sua conta!</Text>

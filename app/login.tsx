@@ -32,8 +32,7 @@ export default function Login() {
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full">
-      <View className="flex flex-row justify-center items-center w-11/12">
-        <Image source={require('@/assets/images/logos/xp-logo.png')} style={{width:'25%'}} resizeMode="contain"/>
+      <View className="flex flex-row justify-center items-center w-11/12 mb-10">
         <Image source={require('@/assets/images/logos/investyou-logo.png')} style={{width:'50%'}} resizeMode="contain"/>
       </View>
       <View className="w-4/5 justify-center items-center">

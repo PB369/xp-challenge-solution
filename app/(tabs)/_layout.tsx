@@ -43,22 +43,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="ia-chat"
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="chat" size={24} color={color}/>
-          ),
-          tabBarLabel: ({ focused, color }) => (
-            <View style={{ alignItems: "center" }}>
-              <Text style={{ color, fontSize: 12 }}>Assistente</Text>
-              {focused && (
-                <View style={styles.underline} />
-              )}
-            </View>
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="wallet"
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -67,6 +51,22 @@ export default function TabsLayout() {
           tabBarLabel: ({ focused, color }) => (
             <View style={{ alignItems: "center" }}>
               <Text style={{ color, fontSize: 12 }}>Carteira</Text>
+              {focused && (
+                <View style={styles.underline} />
+              )}
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="ia-chat"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="chat" size={24} color={color}/>
+          ),
+          tabBarLabel: ({ focused, color }) => (
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color, fontSize: 12 }}>Assistente</Text>
               {focused && (
                 <View style={styles.underline} />
               )}

@@ -58,6 +58,10 @@ Press i | open iOS simulator
 Press w | open web
 ```
 
+## 🔐 Figma
+
+Segue o link para acessar o design elaborado no Figma: <https://www.figma.com/design/h3p4LR1QauibHOFADxFrw7/XP-INC?node-id=0-1&t=5cvBo6zSnr8sfGoP-1>
+
 ## 🔐 Licença
 
 Este projeto é de caráter educacional apenas. O uso comercial deste repositório não está autorizado em nenhuma circunstância.
