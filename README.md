@@ -20,6 +20,14 @@ Ele também é destinado para automatizar e facilitar a geração de carteiras d
 - **Tailwind CSS via `nativewind`**
 - **Modelo de IA Generativa**
 
+## 💎 Integrantes do Grupo
+
+- RM99499 – Guilherme Monteiro Espim
+- RM99279 – João Paulo Fonseca Zamperlini
+- RM98297 – Lucas Pisaneschi Speranzini
+- RM97937 – Pedro Henrique Fernandes Lô de Barros
+- RM97824 – Vinicius Oliveira de Barros
+
 ## 📜 Como executar o projeto
 
 Siga os passos abaixo para rodar o projeto localmente:
