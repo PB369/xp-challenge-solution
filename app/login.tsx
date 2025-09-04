@@ -3,24 +3,26 @@ import '@/global.css'
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { useUser } from "@/context/UserContex";
+// import { useUser } from "@/context/UserContex";
 
 export default function Login() {
-  const { login } = useAuth();
-  const { user } = useUser();
-  const router = useRouter();
+  const { user, login } = useAuth();
 
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const router = useRouter();
 
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
-  const handleLogin = () => { 
+  const handleLogin = async () => { 
     setShowErrorMessage(false);
-    const isLoginSuccessful = login(username, password);
 
-    if(isLoginSuccessful && user){
-      if(user.isFirstAccess){
+    const isLoginSuccessful = await login(email, password);
+
+    if(!isLoginSuccessful){
+      setShowErrorMessage(true);
+      if(user && user.isFirstAccess){
         router.replace('/(onboarding)/start');
       } else {
         router.replace('/(tabs)');
@@ -37,7 +39,7 @@ export default function Login() {
       </View>
       <View className="w-4/5 justify-center items-center">
         <Text className="text-white text-2xl font-semibold">Login</Text>
-        <TextInput onChangeText={setUsername} value={username} placeholder="Nome"
+        <TextInput onChangeText={setEmail} value={email} placeholder="Email"
           className="py-2 px-2 my-4 bg-zinc-800 text-white text-base  rounded-md w-full placeholder:text-white"
         />
         <TextInput onChangeText={setPassword} value={password} placeholder="Senha" secureTextEntry
