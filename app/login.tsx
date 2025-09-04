@@ -20,7 +20,7 @@ export default function Login() {
 
     const isLoginSuccessful = await login(email, password);
 
-    if(!isLoginSuccessful){
+    if(isLoginSuccessful){
       setShowErrorMessage(true);
       if(user && user.isFirstAccess){
         router.replace('/(onboarding)/start');

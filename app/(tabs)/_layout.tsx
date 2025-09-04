@@ -9,9 +9,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 export default function TabsLayout() {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
-  if(!isAuthenticated){
+  if(!user){
     return <Redirect href='/login'/>
   }
 

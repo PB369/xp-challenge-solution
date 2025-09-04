@@ -1,6 +1,6 @@
 import { User } from "@/utils/types/userType";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-// import { useUser } from "./UserContex";
+import { createContext, ReactNode, useContext, useEffect } from "react";
+import { useUser } from "./UserContex";
 import { getUser, saveUser, removeUser } from "@/utils/userHelper";
 
 type AuthContextType = {
@@ -20,9 +20,10 @@ const AuthContext = createContext<AuthContextType | undefined>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // const { user, setUser } = useUser();
+  const { user, setUser } = useUser();
   // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [user, setUser] = useState<User | null>(null);
+
+  // const [user, setUser] = useState<User | null>(null);
 
   // const register = (userAuthData: User) => {
   //   const newUser = {

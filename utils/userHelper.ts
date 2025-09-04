@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "./types/userType";
 
-const USER_KEY = "app_user";
+const USER_KEY = "@user_data";
 
 export const saveUser = async (user: User): Promise<void> => {
   try {

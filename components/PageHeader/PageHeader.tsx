@@ -8,7 +8,7 @@ const PageHeader = () => {
   return (
     <View className='flex flex-row justify-center items-center'>
       <Image source={require('@/assets/images/icons/profileV1-icon.png')} style={{width:36, height: 36}}/>
-      <Text className='text-white text-2xl font-semibold ml-2'>{user?.username}</Text>
+      <Text className='text-white text-2xl font-semibold ml-2'>{user ? user.username : 'null'}</Text>
     </View>
   );
 }
