@@ -1,5 +1,5 @@
 import { Image, Text, View } from 'react-native';
-import '@/global.css'
+import '@/global.css';
 import { useUser } from '@/context/UserContex';
 
 const PageHeader = () => {

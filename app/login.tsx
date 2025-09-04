@@ -3,7 +3,6 @@ import '@/global.css'
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-// import { useUser } from "@/context/UserContex";
 
 export default function Login() {
   const { user, login } = useAuth();

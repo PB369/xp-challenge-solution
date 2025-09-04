@@ -5,8 +5,6 @@ import { getUser, saveUser, removeUser } from "@/utils/userHelper";
 
 type AuthContextType = {
   user: User | null;
-  // isAuthenticated: boolean,
-  // register: (userData: User) => void,
   signUp: (username: string, email: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>,
@@ -21,19 +19,6 @@ const AuthContext = createContext<AuthContextType | undefined>({
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { user, setUser } = useUser();
-  // const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  // const [user, setUser] = useState<User | null>(null);
-
-  // const register = (userAuthData: User) => {
-  //   const newUser = {
-  //       ...userAuthData,
-  //       isAuthenticated: false,
-  //       isFirstAccess: true,
-  //   }
-  //   setUser(newUser);
-  //   setIsAuthenticated(false);
-  // };
 
   useEffect(()=>{
     const loadUser = async () => {
@@ -71,19 +56,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await saveUser(loginUser);
       setUser(loginUser);
 
-      return true
+      return true;
     } else {
       console.warn("Usuário não encontrado, faça o cadastro primeiro");
-      return false
+      return false;
     }
-
-    // if(user && user.username === username && user.password === password){
-    //   const updatedUser = { ...user, isAuthenticated: true }
-    //   setUser(updatedUser);
-    //   setIsAuthenticated(true);
-    //   return true;
-    // } 
-    // return false;
   }
 
   const logout = async () => {

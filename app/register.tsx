@@ -3,7 +3,6 @@ import '@/global.css';
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Register() {
   const { signUp } = useAuth();
@@ -17,15 +16,6 @@ export default function Register() {
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
-  // const saveData = async () => {
-  //   try {
-  //     await AsyncStorage.setItem("user_name", name);
-  //     setSavedName(name);
-  //   } catch (error) {
-  //     console.error("Erro ao salvar:", error);
-  //   }
-  // };
-
   const handleRegister = () => {
     setShowErrorMessage(false);
 
@@ -34,16 +24,7 @@ export default function Register() {
       setShowErrorMessage(true);
     } else {
       if(password === confirmPassword) {
-        // register({ username, password, email })
-
         signUp(username, email, password);
-
-        // try {
-        //   await AsyncStorage.setItem("userData", name);
-        //   setSavedName(name);
-        // } catch (error) {
-        //   console.error("Erro ao salvar:", error);
-        // }
         router.replace('/login');
       } else {
         setErrorMessage('Os campos de senha não são iguais');
