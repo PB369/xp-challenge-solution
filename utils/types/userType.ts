@@ -1,14 +1,17 @@
+import { PortfolioType } from "./portifolioType";
+
 export type User = {
-  id: string,
-  username: string,
-  password: string,
-  email: string,
-  isFirstAccess: boolean,
-  isAuthenticated: boolean,
-  experience?: string,
-  goal?: string,
-  timeOfInvestment?: string,
-  initialAmount?: number,
-  profileAssessment?: string,
-  monthlyAmount?: number,
+  id: string;
+  username: string;
+  password: string;
+  email: string;
+  isFirstAccess: boolean;
+  isAuthenticated: boolean;
+  experience?: string;
+  goal?: string;
+  timeOfInvestment?: string;
+  initialAmount?: number;
+  profileAssessment?: string;
+  monthlyAmount?: number;
+  portifolios?: PortfolioType[];
 };

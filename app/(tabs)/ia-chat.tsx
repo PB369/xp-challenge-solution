@@ -16,7 +16,9 @@ import {
 
 export default function IAChat() {
   const [textValue, setTextValue] = useState("");
+  const [showViewPortfolioBtn, setShowViewPortfolioBtn] = useState(false);
   const { user } = useUser();
+  const GEMINI_API_KEY = "";
 
   const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Estruture minha carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
 
@@ -24,21 +26,19 @@ export default function IAChat() {
 
   const [messages, setMessages] = useState<Message[]>([{
     role: "system",
-    content: `Você é um assistente financeiro inteligente e educativo, especializado em orientar usuários sobre investimentos de forma personalizada e acessível. Seu papel é esclarecer dúvidas, explicar conceitos e ajudar o usuário a entender o funcionamento do mercado, sempre com base em seu perfil e nas informações recebidas durante o onboarding.
+    content: 
+    `Você é um assistente financeiro inteligente e educativo, especializado em orientar usuários sobre investimentos de forma personalizada e acessível.
+    
+    Seu papel é esclarecer dúvidas, explicar conceitos e ajudar o usuário a entender o funcionamento do mercado, sempre com base em seu perfil e nas informações recebidas durante o onboarding.
 
     Importante:
-
-    Sua orientação é apenas educacional e não constitui recomendação de compra, venda ou oferta de produtos financeiros.
-    Nunca cite ativos específicos (ex: ações como PETR4 ou fundos com CNPJ), apenas classes de ativos (ex: renda fixa, ações, fundos imobiliários).
-
-    Use linguagem acessível, evite jargões técnicos ou termos complexos sem explicação.
-
-    Mantenha o foco no que o usuário disse por último, sem repetir o histórico da conversa.
-
-    Seja objetivo, empático e profissional, como um educador financeiro experiente.
+    - Sua orientação é apenas educacional e não constitui recomendação de compra, venda ou oferta de produtos financeiros.
+    - Nunca cite ativos específicos (ex: ações como PETR4 ou fundos com CNPJ), apenas classes de ativos (ex: renda fixa, ações, fundos imobiliários).
+    - Use linguagem acessível, evite jargões técnicos ou termos complexos sem explicação.
+    - Mantenha o foco no que o usuário disse por último, sem repetir o histórico da conversa.
+    - Seja objetivo, empático e profissional, como um educador financeiro experiente.
 
     Considere o seguinte contexto do usuário:
-
     Nome: ${user?.username}
     Nível de experiência: ${user?.experience}
     Objetivo financeiro: ${user?.goal}
@@ -46,24 +46,51 @@ export default function IAChat() {
     Valor inicial disponível: ${user?.initialAmount}
     Perfil de risco: ${user?.profileAssessment} (ex: conservador, moderado, agressivo)
     Parcela mensal da renda disponível para investir: ${user?.monthlyAmount}
-    
-    Quando o usuário fizer uma pergunta:
-    
-    Cumprimente-o de forma profissional e cordial (ex: “Olá, ${user?.username}, tudo bem?”).
-    
-    Dê uma resposta clara, personalizada e educativa com base nas informações acima.
-    
-    Se necessário, use exemplos ou analogias simples para facilitar o entendimento.
-    
-    Caso a dúvida do usuário envolva recomendações, lembre que sua função é orientar por classes de ativos, e não sugerir produtos específicos.
-    
-    Quando apropriado, ofereça conteúdos complementares, como conceitos, boas práticas ou termos explicados.
-    
-    Exemplo de tom esperado:
-    
-    “Olá, João! Que bom falar com você. Como seu perfil é conservador e seu objetivo é a aposentadoria em longo prazo, posso explicar como a renda fixa pode ser uma base sólida para sua carteira.”
-    
-    Esteja sempre pronto para responder a novas dúvidas de forma contextual, sem repetir o que já foi dito anteriormente.` 
+
+    Responda sempre em JSON no seguinte formato:
+
+    Se o usuário pedir criação de carteira:
+    {
+      "action": "create_portfolio",
+      "portfolio": {
+        "id": "c1",
+        "ownerId": "u1",
+        "portfolioName": "Carteira personalizada",
+        "createdAt": "2025-09-09T12:00:00Z",
+        "updatedAt": "2025-09-09T12:00:00Z",
+        "totalValue": 10000,
+        "profile": "Conservador | Moderado | Agressivo",
+        "investmentHorizon": "5 anos",
+        "assets": [
+          {
+            "id": "a1",
+            "assetName": "Tesouro Selic",
+            "type": "Renda Fixa";,
+            "percentageAllocation": 50,
+            "expectedReturn": 9.0,
+            "riskLevel": "Baixo",
+            "liquidity": "D+1",
+            "description": "Renda fixa pública com liquidez diária, ideal para reserva de emergência."
+          },
+          {
+            "id": "a2",
+            "name": "Fundos Imobiliários",
+            "type": "Fundos Imobiliários",
+            "percent": 20,
+            "expectedReturn": 10.0,
+            "riskLevel": "Médio",
+            "liquidity": "Alta",
+            "description": "Fundos que investem em imóveis e pagam rendimentos mensais."
+          }
+        ]
+      }
+    }
+
+    Se for apenas conversa normal:
+    {
+      "action": "chat",
+      "message": "Sua resposta em texto aqui..."
+    }`
   }]);
 
   const [chat, setChat] = useState<Message[]>([]);
@@ -71,34 +98,54 @@ export default function IAChat() {
   const send = async () => {
 
     try {
-      const ai = new GoogleGenAI({});
+      const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 
       const message: Message =  {role: "user", content: textValue }
 
       const messagesArray: Message[] = [...messages, message];
-
       const chatMessages: Message[] = [...chat, message];
       
       setChat(chatMessages);
-
       setTextValue("");
 
-      const chatCompletion = await ai.models.generateContent({
+      const aiResponse = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: message.content,
       });
 
-      // const chatCompletion = await groq.chat.completions.create({
-      //   "messages": messagesArray as Groq.Chat.Completions.ChatCompletionMessageParam[],
-      //   "model": "meta-llama/llama-4-scout-17b-16e-instruct",
-      //   "temperature": 1,
-      //   "max_completion_tokens": 1024,
-      //   "top_p": 1,
-      //   "stream": false,
-      //   "stop": null
-      // });
+      const responseText = aiResponse.text as string;
 
-      const aiMessage: Message = { role: "system", content: chatCompletion.text as string};
+      let aiMessage: Message;
+
+      try {
+        const parsedRT = JSON.parse(responseText);
+
+        if(parsedRT.action === "create_portfolio"){
+          //lógica de criação de carteira
+
+          aiMessage = {
+            role: "system",
+            content: "Sua carteira de investimento foi criada! Clique no botão abaixo para acessá-la e vizualizá-la."
+          }
+          setShowViewPortfolioBtn(true);
+        } else if (parsedRT.action === "chat") {
+          aiMessage = {
+            role: "system",
+            content: parsedRT.message
+          }
+        } else {
+          aiMessage = {
+            role: "system",
+            content: responseText
+          }
+        }
+
+      } catch {
+        aiMessage = {
+          role: "system",
+          content: responseText
+        }
+      }
 
       chatMessages.push(aiMessage);
       messagesArray.push(aiMessage);
@@ -127,7 +174,6 @@ export default function IAChat() {
                 style={styles.verticalSugestionButton}
                 onClick={() => setTextValue(value)}
               />
-
             })}
           </View>}
           {chat.length > 0 && <Chat messages={chat} />}
