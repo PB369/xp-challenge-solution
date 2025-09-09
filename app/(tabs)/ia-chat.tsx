@@ -5,7 +5,7 @@ import TextButton from '@/components/ChatPageComponents/TextButton';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { Message } from '@/utils/types/messagesType';
-import { Groq } from 'groq-sdk';
+import { GoogleGenAI } from "@google/genai";
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -66,14 +66,12 @@ export default function IAChat() {
     Esteja sempre pronto para responder a novas dúvidas de forma contextual, sem repetir o que já foi dito anteriormente.` 
   }]);
 
-  const [chat, setChat] = useState<Message[]>([])
+  const [chat, setChat] = useState<Message[]>([]);
 
   const send = async () => {
 
     try {
-      const groq = new Groq({
-        apiKey: "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"
-      });
+      const ai = new GoogleGenAI({});
 
       const message: Message =  {role: "user", content: textValue }
 
@@ -85,17 +83,22 @@ export default function IAChat() {
 
       setTextValue("");
 
-      const chatCompletion = await groq.chat.completions.create({
-        "messages": messagesArray as Groq.Chat.Completions.ChatCompletionMessageParam[],
-        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
-        "temperature": 1,
-        "max_completion_tokens": 1024,
-        "top_p": 1,
-        "stream": false,
-        "stop": null
+      const chatCompletion = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        contents: message.content,
       });
 
-      const aiMessage: Message = { role: "system", content: chatCompletion.choices[0].message.content as string};
+      // const chatCompletion = await groq.chat.completions.create({
+      //   "messages": messagesArray as Groq.Chat.Completions.ChatCompletionMessageParam[],
+      //   "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      //   "temperature": 1,
+      //   "max_completion_tokens": 1024,
+      //   "top_p": 1,
+      //   "stream": false,
+      //   "stop": null
+      // });
+
+      const aiMessage: Message = { role: "system", content: chatCompletion.text as string};
 
       chatMessages.push(aiMessage);
       messagesArray.push(aiMessage);
