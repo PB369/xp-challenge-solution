@@ -9,8 +9,10 @@ import { useUser } from "@/context/UserContex";
 
 export default function Portfolio() {
   const { user } = useUser();
-  const portfolios = user?.portfolios || [];
-  const isPortfolioEmpty = portfolios.length === 0;
+  const portfoliosList = user?.portfolios || [];
+  const portfolio = portfoliosList[0]
+  console.log(portfolio)
+  const isPortfolioEmpty = portfoliosList.length === 0;
 
   return (
     <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}} className="flex-1 bg-black">

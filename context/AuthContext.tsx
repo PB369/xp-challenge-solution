@@ -6,15 +6,15 @@ import { getUser, saveUser, removeUser } from "@/utils/userHelper";
 type AuthContextType = {
   user: User | null;
   signUp: (username: string, email: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => Promise<void>,
+  signIn: (email: string, password: string) => Promise<boolean>;
+  signOut: () => Promise<void>,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
   user: null,
   signUp: async () => {},
-  login: async () => false,
-  logout: async () => {},
+  signIn: async () => false,
+  signOut: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(newUser);
   };
 
-  const login = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     const storedUser = await getUser();
     
     if(storedUser && storedUser.email === email && storedUser.password === password) {
@@ -63,13 +63,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const logout = async () => {
-    await removeUser();
+  const signOut = async () => {
+    const storedUser = await getUser();
+    if (storedUser) {
+      const updatedUser: User = {
+        ...storedUser,
+        isAuthenticated: false,
+      };
+      await saveUser(updatedUser);
+    }
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, signUp, login, logout }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

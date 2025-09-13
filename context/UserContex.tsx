@@ -30,6 +30,21 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     loadUser();
   }, []);
 
+  useEffect(() => {
+    const saveUser = async () => {
+      try {
+        if (user) {
+          await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+        } else {
+          await AsyncStorage.removeItem(USER_STORAGE_KEY);
+        }
+      } catch (error) {
+        console.error('An error occurred while saving user in AsyncStorage', error);
+      }
+    };
+    saveUser();
+  }, [user]);
+
   const changeUserProperty = (property: keyof User, value: any) => {
     if(!user) return;
     setUser({...user, [property]: value});

@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
 
-export default function Register() {
+export default function SignUp() {
   const { signUp } = useAuth();
   const router = useRouter();
 

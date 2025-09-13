@@ -5,6 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const PortfolioResume = () => {
   const { user } = useUser();
+  console.log(user)
 
   return (
     <View className="w-11/12 rounded-lg bg-neutral-800 flex justify-center items-center my-3 py-2 px-4">
