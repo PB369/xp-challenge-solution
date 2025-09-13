@@ -1,9 +1,13 @@
 import { assets } from "@/utils/mockedData/mockedAssets";
+import { PortfolioType } from "@/utils/types/portifolioType";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
-const FinancialAssets = () => {
-  
+type Props = {
+  portfolio: PortfolioType,
+}
+
+const FinancialAssets = ({ portfolio }: Props) => {
 
   return (
     <View className="w-11/12 flex justify-center items-center my-3">

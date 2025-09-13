@@ -1,12 +1,12 @@
-import { Image, Pressable, Text, View } from "react-native";
+import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { useUser } from "@/context/UserContex";
 import '@/global.css';
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { useUser } from "@/context/UserContex";
-import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { Image, Pressable, Text, View } from "react-native";
 
 export default function ProfileAssessment() {
-  const { changeUserProperty } = useUser();
+  const { changeUserProperty , user} = useUser();
   const router = useRouter();
 
   const options = [
@@ -28,7 +28,8 @@ export default function ProfileAssessment() {
 
   const handleNext = () => {
     changeUserProperty('profileAssessment', selected!);
-    router.push('/(onboarding)/monthlyAmount');
+    console.log("User property:", user?.profileAssessment);
+    // router.push('/(onboarding)/monthlyAmount');
   }
 
   const handlePrev = () => {
@@ -36,14 +37,14 @@ export default function ProfileAssessment() {
   }
 
   const handleSelected = (option: {content: string, profileType: string}) => {
-    setSelected(option.content);
+    setSelected(option.profileType);
   }
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={5}/>
+        <OnboardingProgress currentStep={4}/>
         <Image source={require('@/assets/images/onboarding-images/profileAssessment-image.png')} style={{width: 276, height: 276, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Como você reagiria se sua carteira caísse 10% em 1 mês?</Text>
@@ -61,7 +62,7 @@ export default function ProfileAssessment() {
                     rounded-md`
                 } 
                 style={{
-                  borderColor: selected === option.content ? '#fff': '#27272a'
+                  borderColor: selected === option.profileType ? '#fff': '#27272a'
                 }}
               >
                 <Text className="text-white text-justify text-sm">{option.content}</Text>

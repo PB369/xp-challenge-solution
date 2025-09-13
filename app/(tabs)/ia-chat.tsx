@@ -2,7 +2,6 @@ import { mainBalck, mainWhite } from '@/assets/colors/colors';
 import Chat from '@/components/ChatPageComponents/Chat';
 import ChatTextField from '@/components/ChatPageComponents/ChatTextField';
 import TextButton from '@/components/ChatPageComponents/TextButton';
-import { useAuth } from '@/context/AuthContext';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { Message } from '@/utils/types/messagesType';
@@ -19,11 +18,11 @@ import {
 export default function IAChat() {
 
   const [textValue, setTextValue] = useState("");
-  const [showViewPortfolioBtn, setShowViewPortfolioBtn] = useState(false);
+  const [isResponseLoading, setIsResponseLoading] = useState(false);
   const { user, changeUserProperty, setUser } = useUser();
   const GEMINI_API_KEY = "AIzaSyAsIdW9PJVgqMmfsgmzbo4pPx8D2sGVS7M";
 
-  const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Estruture minha carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
+  const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Crie uma nova carteira de investimentos para mim", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
 
   const verticalSugestions: string[] = ["Ativos com meu perfil", "Notícias recentes"];
 
@@ -45,45 +44,81 @@ export default function IAChat() {
     Nível de experiência: ${user?.experience}
     Objetivo financeiro: ${user?.goal}
     Horizonte de investimento: ${user?.timeOfInvestment}
-    Valor inicial disponível: ${user?.initialAmount}
     Perfil de risco: ${user?.profileAssessment} (ex: conservador, moderado, agressivo)
-    Parcela mensal da renda disponível para investir: ${user?.monthlyAmount}
+    Quantia mensal para investir: ${user?.monthlyAmount}
 
     Responda sempre em JSON (ou seja, quero que sua resposta seja escrita em formato JSON) no seguinte formato:
 
-    Se o usuário pedir criação de carteira, gere um modelo de exemplo (não precisa ser uma carteira de investimentos real) mas que corresponda a todo o seguinte exemplo:
+    Se o usuário pedir criação de carteira, gere um modelo de exemplo (não precisa ser uma carteira de investimentos real) mas que corresponda a todo o exemplo abaixo. Selecione apenas tipos de ativos (type) entre: "Renda Fixa", "Renda Variável", "Fundos de Investimentos", "Fundos Imobiliários" ou "ETFs". Escreva-os exatamente como está entre aspas. Em totalValue o valor deve ser obtido pela seguinte fórmula: ${user?.monthlyAmount} * (12 * quantidade de anos em investmentHorizon). Coloque apenas o valor desse cálculo.
+    
+    Aqui está um exemplo de como você deve responder:
     {
       "action": "create_portfolio",
       "portfolio": {
         "id": "c1",
         "ownerId": ${user?.username},
+        "ownerProfile": ${user?.profileAssessment},
         "portfolioName": "Carteira personalizada",
         "createdAt": "2025-09-09T12:00:00Z",
         "updatedAt": "2025-09-09T12:00:00Z",
-        "totalValue": 10000,
-        "profile": "Conservador | Moderado | Agressivo",
         "investmentHorizon": "5 anos",
+        "totalValue": ${user?.monthlyAmount} * (12 * quantidade de anos em investmentHorizon),
+        "estimatedProfitability": "+8.2% a.a",
+        "generalRisk": "Alto" | "Médio" | "Baixo",
         "assets": [
           {
             "id": "a1",
             "assetName": "Tesouro Selic",
-            "type": "Renda Fixa";,
+            "type": "Renda Fixa",
             "percentageAllocation": 50,
             "expectedReturn": 9.0,
-            "riskLevel": "Baixo",
             "liquidity": "D+1",
-            "description": "Renda fixa pública com liquidez diária, ideal para reserva de emergência."
+            "description": "Renda fixa pública com liquidez diária, ideal para reserva de emergência.",
+            "whyThisAsset": "Selecionamos o Tesouro Selic para sua carteira porque ele oferece proteção contra a inflação, possui baixo risco de crédito e é compatível com seu objetivo de longo prazo.",
+            profitability: "+9.1%",
+            benefitTags: ["Proteção Inflacionária", "Ideal para prazos longos", "Baixo risco", "Alta segurança"],
+            details: {
+              issuing: "Tesouro Nacional",
+              indexer: "IPCA + juros prefixados",
+              expirationDate: "15/05/2029",
+              typeRemunaration: "Pós-fixado",
+              paymentFrequency: "Semestral",
+            },
+            externalResources: [{
+              title: "Tesouro IPCA",
+              source: "https://www.tesourodireto.com.br",
+            }],
           },
           {
-            "id": "a2",
-            "name": "Fundos Imobiliários",
-            "type": "Fundos Imobiliários",
-            "percent": 20,
-            "expectedReturn": 10.0,
-            "riskLevel": "Médio",
-            "liquidity": "Alta",
-            "description": "Fundos que investem em imóveis e pagam rendimentos mensais."
+            "id": "b1",
+            "assetName": "ITUB4 - Itaú Unibanco",
+            "type": "Ações",
+            "percentageAllocation": 25,
+            "expectedReturn": 12.5,
+            "liquidity": "D+2",
+            "description": "Ações ordinárias do Itaú Unibanco, um dos maiores bancos da América Latina.",
+            "whyThisAsset": "O Itaú Unibanco foi selecionado pela sua forte presença no setor financeiro, histórico consistente de dividendos e boa governança corporativa.",
+            "profitability": "+11.3%",
+            "benefitTags": ["Facilidade de Negociação", "Alta liquidez", "Crescimento setorial"],
+            "details": {
+              "issuing": "Itaú Unibanco Holding S.A.",
+              "indexer": "Ibovespa",
+              "expirationDate": null,
+              "typeRemunaration": "Dividendos",
+              "paymentFrequency": "Trimestral"
+            },
+            "externalResources": [
+              {
+                "title": "Ações ITUB4",
+                "source": "https://www.b3.com.br"
+              },
+              {
+                "title": "Relatório Itaú",
+                "source": "https://www.itau.com.br/relacoes-com-investidores/"
+              }
+            ]
           }
+
         ]
       }
     }
@@ -118,6 +153,12 @@ export default function IAChat() {
       setChat(updatedChat);
       setTextValue("");
 
+      setIsResponseLoading(true);
+      setChat(prev => [
+        ...prev,
+        { role: "model", content: "<loading>" } // placeholder
+      ]);
+
       const aiResponse = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: updatedMessages.map(m => ({
@@ -142,9 +183,8 @@ export default function IAChat() {
 
           aiMessage = {
             role: "model",
-            content: "Sua carteira de investimento foi criada! Clique no botão abaixo para acessá-la e visualizá-la."
+            content: "Sua carteira de investimento foi criada e está pronta para ser usada! Acesse a página Carteira para vizualizá-la."
           };
-          setShowViewPortfolioBtn(true);
 
         } else if (parsed.action === "chat") {
           aiMessage = {
@@ -166,6 +206,11 @@ export default function IAChat() {
           content: responseText
         };
       }
+
+      setChat(prev => {
+        const withoutLoading = prev.filter(m => m.content !== "<loading>");
+        return [...withoutLoading, aiMessage];
+      });
 
       setMessages(prev => [...prev, aiMessage]);
       setChat(prev => [...prev, aiMessage]);

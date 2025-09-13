@@ -1,8 +1,13 @@
 import ProgressBar from "@/components/ProgressBar/ProgressBar";
 import { Text, View } from "react-native";
 import Feather from '@expo/vector-icons/Feather';
+import { PortfolioType } from "@/utils/types/portifolioType";
 
-const ProfileAlignment = () => {
+type Props = {
+  portfolio: PortfolioType,
+}
+
+const ProfileAlignment = ({ portfolio }: Props) => {
 
   return (
     <View className="w-11/12 rounded-lg bg-neutral-800 flex justify-center items-center my-3 py-5 px-4">

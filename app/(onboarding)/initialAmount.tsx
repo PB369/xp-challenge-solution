@@ -12,7 +12,7 @@ export default function InitialAmount() {
   const [initialAmount, setInitialAmount] = useState<string>("");
 
   const handleNext = () => {
-    changeUserProperty('initialAmount', initialAmount);
+    // changeUserProperty('initialAmount', initialAmount);
     router.push('/(onboarding)/profileAssessment');
   }
 
@@ -28,7 +28,7 @@ export default function InitialAmount() {
 
         <Image source={require('@/assets/images/onboarding-images/initialAmount-image.png')} style={{width: 300, height: 300, marginBottom:16}}/>
 
-        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual valor você tem disponível para investir hoje?</Text>
+        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Quanto você pretende alocar mensalmente para seus investimentos?</Text>
 
         <View className="w-full my-4">
           <TextInput 

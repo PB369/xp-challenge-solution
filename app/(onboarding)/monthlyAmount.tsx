@@ -1,67 +1,53 @@
-import { Image, Pressable, Text, View } from "react-native";
+import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { useUser } from "@/context/UserContex";
 import '@/global.css';
 import { useRouter } from "expo-router";
-import { useState } from "react";
-import { useUser } from "@/context/UserContex";
-import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { useEffect, useState } from "react";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
 
 export default function MonthlyAmount() {
-  const { changeUserProperty } = useUser();
+  const { changeUserProperty, user } = useUser();
   const router = useRouter();
 
-  const options = ['Menos que 5%', 'Entre 5% a 15%', 'Entre 15% e 30%', 'Mais de 30%'];
-
-  const [selected, setSelected] = useState<string | null>(null);
+  const [monthlyAmount, setMonthlyAmount] = useState<string>("");
 
   const handleFinish = () => {
+    changeUserProperty('monthlyAmount', monthlyAmount);
     changeUserProperty('isFirstAccess', false);
-    router.replace('/(tabs)');
+    console.log("User property:", user?.monthlyAmount);
+    // router.replace('/(tabs)');
   }
 
   const handlePrev = () => {
     router.back();
   }
 
-  const handleSelected = (option: string) => {
-    setSelected(option);
-    changeUserProperty('monthlyAmount', option);
-  }
+  useEffect(() => {
+  console.log("User atualizado:", user?.monthlyAmount);
+}, [user]);
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={6}/>
+        <OnboardingProgress currentStep={5}/>
 
         <Image source={require('@/assets/images/onboarding-images/monthlyAmount-image.png')} style={{width: 258, height: 258, marginBottom:16}}/>
 
-        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Qual parte da sua renda mensal você pode investir?</Text>
-
+        <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Quanto você pretende alocar mensalmente para seus investimentos?</Text>
+        
         <View className="w-full my-4">
-          {options.map((option) => {
-            return (
-              <Pressable 
-                key={option} onPress={()=>handleSelected(option)} 
-                className={
-                  `border 
-                  bg-zinc-800 
-                    my-2 py-2 px-4 
-                    w-full 
-                    rounded-md`
-                } 
-                style={{
-                  borderColor: selected === option ? '#fff': '#27272a'
-                }}
-              >
-                <Text className="text-white text-justify text-sm">{option}</Text>
-              </Pressable>
-            )
-          })}
+          <TextInput 
+            value={monthlyAmount} 
+            onChangeText={e=>{setMonthlyAmount(e);console.log(e, monthlyAmount)}}
+            placeholder="Digite o valor"
+            className="text-white placeholder:text-white border-b-2 border-white text-center"
+          /> 
         </View>
 
         <View className="flex-col w-full justify-center items-center">
-          <Pressable onPress={handleFinish} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
-            <Text className="text-center text-base font-semibold">Próximo</Text>
+          <Pressable onPress={handleFinish} className={`${monthlyAmount.length===0 && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={monthlyAmount.length===0}>
+            <Text className="text-center text-base font-semibold">Finalizar</Text>
           </Pressable>
           <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
             <Text className="text-center text-base font-semibold text-white">Voltar</Text>

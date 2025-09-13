@@ -10,8 +10,8 @@ export type User = {
   experience?: string;
   goal?: string;
   timeOfInvestment?: string;
-  initialAmount?: number;
+  // initialAmount?: number;
   profileAssessment?: string;
-  monthlyAmount?: number;
+  monthlyAmount?: string;
   portfolios?: PortfolioType[];
 };

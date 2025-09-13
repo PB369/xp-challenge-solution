@@ -6,7 +6,7 @@ type Props = {
 }
 
 const OnboardingProgress = ({currentStep}: Props) => {
-  const totalSteps: number = 6;
+  const totalSteps: number = 5;
   const progressPercentage: number = (currentStep / totalSteps) * 100;
 
   return (

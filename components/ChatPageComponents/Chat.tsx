@@ -1,6 +1,7 @@
 import { darkGray, mainGray, mainWhite, mainYello } from "@/assets/colors/colors";
 import { Message } from "@/utils/types/messagesType";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import LoadingMessage from "./LoadingMsg";
 
 type Props = {
   messages: Array<Message>,
@@ -13,16 +14,19 @@ export default function Chat({ messages }: Props) {
       contentContainerStyle={styles.contentContainer}
       keyboardShouldPersistTaps="handled"
     >
-      <Text>teste</Text>
       {messages.map((message, index) => (
         <View
           key={index}
           style={message.role === "user" ? styles.messageUserRow : styles.messageAIRow}
         >
           <View style={message.role === "user" ? styles.messageUser : styles.messageAI}>
-            <Text style={message.role === "user" ? styles.messageUserText : styles.messageAIText}>
-              {message.content}
-            </Text>
+            {message.content === "<loading>" && message.role === "model" ? (
+              <LoadingMessage />
+            ) : (
+              <Text style={message.role === "user" ? styles.messageUserText : styles.messageAIText}>
+                {message.content}
+              </Text>
+            )}
           </View>
         </View>
       ))}

@@ -15,7 +15,7 @@ export default function TimeOfInvestment() {
 
   const handleNext = () => {
     changeUserProperty('timeOfInvestment', selected!);
-    router.push('/(onboarding)/initialAmount');
+    router.push('/(onboarding)/profileAssessment');
   }
 
   const handlePrev = () => {

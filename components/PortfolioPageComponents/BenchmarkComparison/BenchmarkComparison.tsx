@@ -1,7 +1,12 @@
 import ProgressBar from "@/components/ProgressBar/ProgressBar";
+import { PortfolioType } from "@/utils/types/portifolioType";
 import { Image, Text, View } from "react-native"
 
-const BenchmarkComparison = () => {
+type Props = {
+  portfolio: PortfolioType,
+}
+
+const BenchmarkComparison = ({ portfolio }: Props) => {
   return (
     <View className="w-11/12 flex justify-center items-center my-3">
       <View className="flex flex-row w-full">

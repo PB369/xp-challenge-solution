@@ -4,20 +4,38 @@ export type PortfolioAssetType = {
   type: "Renda Fixa" | "Ações" | "Fundos Imobiliários" | "ETFs" | "Internacional" | "Caixa";
   percentageAllocation: number;
   expectedReturn: number;
-  riskLevel: "Baixo" | "Médio" | "Alto";
   liquidity: string;
   description: string;
+  whyThisAsset: string;
+
+  profitability: string,
+  benefitTags: {
+    iconName: string,
+    content: string
+  }[],
+  details: {
+    issuing: string,
+    indexer: string,
+    expirationDate: string,
+    typeRemunaration: string,
+    paymentFrequency: string,
+  },
+  externalResources: {
+    title: string,
+    source: string,
+  }[],
 }
 
 export type PortfolioType = {
   id: string;
   ownerId: string;
+  ownerProfile: "Conservador" | "Moderado" | "Agressivo";
   portfolioName: string;
   createdAt: string;
   updatedAt: string;
-  totalValue: number;
-  assets: PortfolioAssetType[];
-  ownerProfile: "Conservador" | "Moderado" | "Agressivo";
   investmentHorizon: string;
-  notes?: string;
+  totalValue: number;
+  estimatedProfitability: string;
+  generalRisk: string;
+  assets: PortfolioAssetType[];
 };

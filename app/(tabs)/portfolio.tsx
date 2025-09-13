@@ -1,12 +1,11 @@
-import { ScrollView, Text, View } from "react-native";
-import '@/global.css'
-import FinancialAssets from "@/components/PortfolioPageComponents/FinancialAssets/FinancialAssets";
 import BenchmarkComparison from "@/components/PortfolioPageComponents/BenchmarkComparison/BenchmarkComparison";
-import ProfileAlignment from "@/components/PortfolioPageComponents/ProfileAlignment/ProfileAlignment";
-import PortfolioResume from "@/components/PortfolioPageComponents/PortfolioResume/PortfolioResume";
+import FinancialAssets from "@/components/PortfolioPageComponents/FinancialAssets/FinancialAssets";
 import PortfolioPieChart from "@/components/PortfolioPageComponents/PortfolioPieChart/PortfolioPieChart";
+import PortfolioResume from "@/components/PortfolioPageComponents/PortfolioResume/PortfolioResume";
+import ProfileAlignment from "@/components/PortfolioPageComponents/ProfileAlignment/ProfileAlignment";
 import { useUser } from "@/context/UserContex";
-import { useAuth } from "@/context/AuthContext";
+import '@/global.css';
+import { ScrollView, Text, View } from "react-native";
 
 export default function Portfolio() {
   const { user } = useUser();
@@ -24,15 +23,15 @@ export default function Portfolio() {
       {isPortfolioEmpty ? (
         <View className="flex-col justify-center items-center w-11/12 flex-1">
           <Text className="text-white opacity-70 text-center font-bold text-xl">Nenhuma carteira criada.</Text>
-          <Text className="text-white opacity-70 text-center font-bold text-xl">Peça ao seu assistente de IA para gerar uma e comece a ganhar dinheiro!</Text>
+          <Text className="text-white opacity-70 text-center font-bold text-xl">Peça ao seu assistente de IA para gerar uma e comece a ganhar dinheiro! {user?.monthlyAmount ?? 'UNDEFINED'}</Text>
         </View>
       ) : (
         <>
-          <PortfolioResume/>
-          <PortfolioPieChart/>
-          <FinancialAssets/>
-          <BenchmarkComparison/>
-          <ProfileAlignment/>
+          <PortfolioResume portfolio={portfolio}/>
+          <PortfolioPieChart portfolio={portfolio}/>
+          <FinancialAssets portfolio={portfolio}/>
+          <BenchmarkComparison portfolio={portfolio}/>
+          <ProfileAlignment portfolio={portfolio}/>
         </>
       )}
     </ScrollView>
