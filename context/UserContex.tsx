@@ -30,7 +30,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     loadUser();
   }, []);
 
-  const changeUserProperty = (property: keyof User, value: string | number | boolean) => {
+  const changeUserProperty = (property: keyof User, value: any) => {
     if(!user) return;
     setUser({...user, [property]: value});
   }

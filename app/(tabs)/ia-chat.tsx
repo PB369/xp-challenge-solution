@@ -5,6 +5,7 @@ import TextButton from '@/components/ChatPageComponents/TextButton';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { Message } from '@/utils/types/messagesType';
+import { PortfolioType } from '@/utils/types/portifolioType';
 import { GoogleGenAI } from "@google/genai";
 import { useState } from 'react';
 import {
@@ -17,23 +18,22 @@ import {
 export default function IAChat() {
   const [textValue, setTextValue] = useState("");
   const [showViewPortfolioBtn, setShowViewPortfolioBtn] = useState(false);
-  const { user } = useUser();
-  const GEMINI_API_KEY = "";
+  const { user, changeUserProperty, setUser } = useUser();
+  const GEMINI_API_KEY = "AIzaSyAsIdW9PJVgqMmfsgmzbo4pPx8D2sGVS7M";
 
   const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Estruture minha carteira", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
 
   const verticalSugestions: string[] = ["Ativos com meu perfil", "Notícias recentes"];
 
   const [messages, setMessages] = useState<Message[]>([{
-    role: "system",
+    role: "model",
     content: 
-    `Você é um assistente financeiro inteligente e educativo, especializado em orientar usuários sobre investimentos de forma personalizada e acessível.
-    
-    Seu papel é esclarecer dúvidas, explicar conceitos e ajudar o usuário a entender o funcionamento do mercado, sempre com base em seu perfil e nas informações recebidas durante o onboarding.
+    `Você é um assistente financeiro integrado a um aplicativo de um projeto acadêmico.
 
     Importante:
-    - Sua orientação é apenas educacional e não constitui recomendação de compra, venda ou oferta de produtos financeiros.
-    - Nunca cite ativos específicos (ex: ações como PETR4 ou fundos com CNPJ), apenas classes de ativos (ex: renda fixa, ações, fundos imobiliários).
+    - Sempre responda apenas com JSON válido.
+    - Nunca adicione comentários, texto fora do JSON, explicações ou quebras de linha extras.
+    - O JSON deve seguir exatamente um dos seguintes formatos:
     - Use linguagem acessível, evite jargões técnicos ou termos complexos sem explicação.
     - Mantenha o foco no que o usuário disse por último, sem repetir o histórico da conversa.
     - Seja objetivo, empático e profissional, como um educador financeiro experiente.
@@ -47,14 +47,14 @@ export default function IAChat() {
     Perfil de risco: ${user?.profileAssessment} (ex: conservador, moderado, agressivo)
     Parcela mensal da renda disponível para investir: ${user?.monthlyAmount}
 
-    Responda sempre em JSON no seguinte formato:
+    Responda sempre em JSON (ou seja, quero que sua resposta seja escrita em formato JSON) no seguinte formato:
 
-    Se o usuário pedir criação de carteira:
+    Se o usuário pedir criação de carteira, gere um modelo de exemplo (não precisa ser uma carteira de investimentos real) mas que corresponda a todo o seguinte exemplo:
     {
       "action": "create_portfolio",
       "portfolio": {
         "id": "c1",
-        "ownerId": "u1",
+        "ownerId": ${user?.username},
         "portfolioName": "Carteira personalizada",
         "createdAt": "2025-09-09T12:00:00Z",
         "updatedAt": "2025-09-09T12:00:00Z",
@@ -95,22 +95,33 @@ export default function IAChat() {
 
   const [chat, setChat] = useState<Message[]>([]);
 
+  const addPortfolio = (portfolio: PortfolioType) => {
+    if(!user) return;
+    const updatedPortfolios = [...(user.portfolios || []), portfolio];
+    setUser({...user, portfolios: updatedPortfolios});
+  }
+
   const send = async () => {
+    if (!textValue.trim()) return;
 
     try {
-      const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
+      const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-      const message: Message =  {role: "user", content: textValue }
+      const userMessage: Message = { role: "user", content: textValue };
 
-      const messagesArray: Message[] = [...messages, message];
-      const chatMessages: Message[] = [...chat, message];
-      
-      setChat(chatMessages);
+      const updatedMessages = [...messages, userMessage];
+      setMessages(updatedMessages);
+
+      const updatedChat = [...chat, userMessage];
+      setChat(updatedChat);
       setTextValue("");
 
       const aiResponse = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: message.content,
+        contents: updatedMessages.map(m => ({
+          role: m.role,
+          parts: [{ text: m.content }],
+        })),
       });
 
       const responseText = aiResponse.text as string;
@@ -118,46 +129,49 @@ export default function IAChat() {
       let aiMessage: Message;
 
       try {
-        const parsedRT = JSON.parse(responseText);
+        const cleanedResponse = responseText.trim().replace(/^```json\s*/, '').replace(/```$/, '');
 
-        if(parsedRT.action === "create_portfolio"){
-          //lógica de criação de carteira
+        const parsed = JSON.parse(cleanedResponse);
+        console.log("Resposta:", parsed);
+
+        if (parsed.action === "create_portfolio") {
+          const portfolio: PortfolioType = parsed.portfolio;
+          addPortfolio(portfolio);
 
           aiMessage = {
-            role: "system",
-            content: "Sua carteira de investimento foi criada! Clique no botão abaixo para acessá-la e vizualizá-la."
-          }
+            role: "model",
+            content: "Sua carteira de investimento foi criada! Clique no botão abaixo para acessá-la e visualizá-la."
+          };
           setShowViewPortfolioBtn(true);
-        } else if (parsedRT.action === "chat") {
+
+        } else if (parsed.action === "chat") {
           aiMessage = {
-            role: "system",
-            content: parsedRT.message
-          }
+            role: "model",
+            content: parsed.message
+          };
+
         } else {
           aiMessage = {
-            role: "system",
+            role: "model",
             content: responseText
-          }
+          };
         }
 
       } catch {
+        console.log("Parse falhou. Conteúdo: \n\n", responseText);
         aiMessage = {
-          role: "system",
+          role: "model",
           content: responseText
-        }
+        };
       }
 
-      chatMessages.push(aiMessage);
-      messagesArray.push(aiMessage);
-
-      setChat(chatMessages);
-      setMessages(messagesArray);
+      setMessages(prev => [...prev, aiMessage]);
+      setChat(prev => [...prev, aiMessage]);
 
     } catch (err) {
-      console.log(err);
+      console.error("Erro ao enviar mensagem para IA:", err);
     }
-
-  }
+  };
 
   return (
     <KeyboardAvoidingView

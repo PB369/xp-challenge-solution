@@ -16,7 +16,7 @@ export default function AssetExplanation() {
   return (
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>
       <View className="w-11/12 flex justify-center items-center">
-        <Pressable onPress={() => router.replace('/(tabs)/wallet')} className="mb-4 self-start w-1/4 py-2 ">
+        <Pressable onPress={() => router.replace('/(tabs)/portfolio')} className="mb-4 self-start w-1/4 py-2 ">
           <Feather name="arrow-left" size={28} color="white" />
         </Pressable>
         <View>

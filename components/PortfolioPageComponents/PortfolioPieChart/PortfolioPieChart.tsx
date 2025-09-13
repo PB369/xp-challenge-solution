@@ -1,7 +1,7 @@
 import { Text, View } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 
-const WalletPieChart = () => {
+const PortfolioPieChart = () => {
   const data = [{value: 30, color: '#00b2ff', text: '30%'}, {value: 25, color: '#f95555', text: '25%'}, {value: 45, color: '#ffce00', text: '45%'}];
 
   return (
@@ -32,4 +32,4 @@ const WalletPieChart = () => {
   )
 }
 
-export default WalletPieChart;
+export default PortfolioPieChart;

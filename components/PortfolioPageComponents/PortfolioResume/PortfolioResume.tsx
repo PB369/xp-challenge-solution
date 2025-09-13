@@ -3,7 +3,7 @@ import { Image, Text, View } from "react-native"
 import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-const WalletResume = () => {
+const PortfolioResume = () => {
   const { user } = useUser();
 
   return (
@@ -57,4 +57,4 @@ const WalletResume = () => {
   )
 }
 
-export default WalletResume;
+export default PortfolioResume;

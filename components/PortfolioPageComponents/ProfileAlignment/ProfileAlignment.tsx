@@ -14,7 +14,7 @@ const ProfileAlignment = () => {
       </View>
       <View className="flex flex-row justify-start items-center w-full">
         <Feather name="check" size={26} color="#0dff00" />
-        <Text className="w-3/4 text-white ml-3">Carteira equilibrada. Atençao a exposição em ações (acima de 30%).</Text>
+        <Text className="w-3/4 text-white ml-3">Carteira equilibrada. Atenção a exposição em ações (acima de 30%).</Text>
       </View>
     </View>
   )

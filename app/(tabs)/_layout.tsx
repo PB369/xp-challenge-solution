@@ -43,7 +43,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="wallet"
+        name="portfolio"
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="wallet" size={20} color={color} />

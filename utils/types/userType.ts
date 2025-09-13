@@ -13,5 +13,5 @@ export type User = {
   initialAmount?: number;
   profileAssessment?: string;
   monthlyAmount?: number;
-  portifolios?: PortfolioType[];
+  portfolios?: PortfolioType[];
 };
