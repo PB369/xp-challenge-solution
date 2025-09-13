@@ -2,6 +2,7 @@ import { mainBalck, mainWhite } from '@/assets/colors/colors';
 import Chat from '@/components/ChatPageComponents/Chat';
 import ChatTextField from '@/components/ChatPageComponents/ChatTextField';
 import TextButton from '@/components/ChatPageComponents/TextButton';
+import { useAuth } from '@/context/AuthContext';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { Message } from '@/utils/types/messagesType';
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 export default function IAChat() {
+
   const [textValue, setTextValue] = useState("");
   const [showViewPortfolioBtn, setShowViewPortfolioBtn] = useState(false);
   const { user, changeUserProperty, setUser } = useUser();

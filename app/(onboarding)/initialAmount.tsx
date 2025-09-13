@@ -16,6 +16,10 @@ export default function InitialAmount() {
     router.push('/(onboarding)/profileAssessment');
   }
 
+  const handlePrev = () => {
+    router.back();
+  }
+
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
@@ -35,9 +39,14 @@ export default function InitialAmount() {
           /> 
         </View>
 
-          <Pressable onPress={handleNext} className={`bg-yellow-400 my-2 py-2 w-full rounded-md`}>
-          <Text className="text-center text-base font-semibold">Próximo</Text>
-        </Pressable>
+        <View className="flex-col w-full justify-center items-center">
+          <Pressable onPress={handleNext} className={`${initialAmount.length===0 && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={initialAmount.length===0}>
+            <Text className="text-center text-base font-semibold">Próximo</Text>
+          </Pressable>
+          <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
+            <Text className="text-center text-base font-semibold text-white">Voltar</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );

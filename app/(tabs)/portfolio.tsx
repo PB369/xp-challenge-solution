@@ -6,6 +6,7 @@ import ProfileAlignment from "@/components/PortfolioPageComponents/ProfileAlignm
 import PortfolioResume from "@/components/PortfolioPageComponents/PortfolioResume/PortfolioResume";
 import PortfolioPieChart from "@/components/PortfolioPageComponents/PortfolioPieChart/PortfolioPieChart";
 import { useUser } from "@/context/UserContex";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Portfolio() {
   const { user } = useUser();

@@ -18,6 +18,10 @@ export default function MonthlyAmount() {
     router.replace('/(tabs)');
   }
 
+  const handlePrev = () => {
+    router.back();
+  }
+
   const handleSelected = (option: string) => {
     setSelected(option);
     changeUserProperty('monthlyAmount', option);
@@ -55,9 +59,14 @@ export default function MonthlyAmount() {
           })}
         </View>
 
+        <View className="flex-col w-full justify-center items-center">
           <Pressable onPress={handleFinish} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
-          <Text className="text-center text-base font-semibold">Finalizar</Text>
-        </Pressable>
+            <Text className="text-center text-base font-semibold">Próximo</Text>
+          </Pressable>
+          <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
+            <Text className="text-center text-base font-semibold text-white">Voltar</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );

@@ -14,12 +14,12 @@ export default function Experience() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const handleNext = () => {
+    changeUserProperty('experience', selected!);
     router.push('/(onboarding)/goal');
   }
 
   const handleSelected = (option: string) => {
     setSelected(option);
-    changeUserProperty('experience', option);
   }
 
   return (

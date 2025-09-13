@@ -1,4 +1,5 @@
 import { User } from '@/utils/types/userType';
+import { removeUser, saveUser } from '@/utils/userHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -31,18 +32,11 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const saveUser = async () => {
-      try {
-        if (user) {
-          await AsyncStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
-        } else {
-          await AsyncStorage.removeItem(USER_STORAGE_KEY);
-        }
-      } catch (error) {
-        console.error('An error occurred while saving user in AsyncStorage', error);
-      }
-    };
-    saveUser();
+    if (user) {
+      saveUser(user);
+    } else {
+      removeUser()
+    }
   }, [user]);
 
   const changeUserProperty = (property: keyof User, value: any) => {

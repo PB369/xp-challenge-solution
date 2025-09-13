@@ -3,6 +3,7 @@ import GoalTracker from "@/components/DashboardPageComponents/GoalTracker/GoalTr
 import ProgressChart from "@/components/DashboardPageComponents/ProgressChart/ProgressChart";
 import RecommendedWallet from "@/components/DashboardPageComponents/RecommendedWallet/RecommendedWallet";
 import WalletInsights from "@/components/DashboardPageComponents/WalletInsights/WalletInsights";
+import { useAuth } from "@/context/AuthContext";
 import '@/global.css';
 import { ScrollView } from "react-native";
 

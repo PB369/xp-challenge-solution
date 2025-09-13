@@ -25,7 +25,7 @@ export default function SignUp() {
     } else {
       if(password === confirmPassword) {
         signUp(username, email, password);
-        router.replace('/login');
+        router.replace('/signIn');
       } else {
         setErrorMessage('Os campos de senha não são iguais');
         setShowErrorMessage(true);
@@ -54,6 +54,9 @@ export default function SignUp() {
         />
         <Pressable onPress={handleRegister} className="bg-yellow-400 py-2 mb-4 w-full rounded-md">
           <Text className="text-center text-base font-semibold">Criar minha conta</Text>
+        </Pressable>
+        <Pressable onPress={()=>router.replace('/signIn')} className="bg-transparent py-2 mb-4 w-full rounded-md">
+          <Text className="text-center text-base font-semibold text-white underline">Já tenho uma conta</Text>
         </Pressable>
       </View>
       {showErrorMessage && (

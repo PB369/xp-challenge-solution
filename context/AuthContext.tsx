@@ -2,12 +2,14 @@ import { User } from "@/utils/types/userType";
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useUser } from "./UserContex";
 import { getUser, saveUser, removeUser } from "@/utils/userHelper";
+import { useRouter } from "expo-router";
 
 type AuthContextType = {
   user: User | null;
   signUp: (username: string, email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => Promise<void>,
+  deleteAccount: () => Promise<void>,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>({
@@ -15,6 +17,7 @@ const AuthContext = createContext<AuthContextType | undefined>({
   signUp: async () => {},
   signIn: async () => false,
   signOut: async () => {},
+  deleteAccount: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -75,8 +78,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  const deleteAccount = async () => {
+    await removeUser();
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, signUp, signIn, signOut }}>
+    <AuthContext.Provider value={{ user, signUp, signIn, signOut, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   )

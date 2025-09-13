@@ -14,12 +14,16 @@ export default function Goal() {
   const [selected, setSelected] = useState<string | null>(null);
 
   const handleNext = () => {
+    changeUserProperty('goal', selected!);
     router.push('/(onboarding)/timeOfInvestment');
+  }
+  
+  const handlePrev = () => {
+    router.back();
   }
 
   const handleSelected = (option: string) => {
     setSelected(option);
-    changeUserProperty('goal', option);
   }
 
   return (
@@ -54,9 +58,14 @@ export default function Goal() {
           })}
         </View>
 
+        <View className="flex-col w-full justify-center items-center">
           <Pressable onPress={handleNext} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
-          <Text className="text-center text-base font-semibold">Próximo</Text>
-        </Pressable>
+            <Text className="text-center text-base font-semibold">Próximo</Text>
+          </Pressable>
+          <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
+            <Text className="text-center text-base font-semibold text-white">Voltar</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );

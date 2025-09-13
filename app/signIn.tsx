@@ -37,7 +37,7 @@ export default function SignIn() {
         <Image source={require('@/assets/images/logos/investyou-logo.png')} style={{width:'50%'}} resizeMode="contain"/>
       </View>
       <View className="w-4/5 justify-center items-center">
-        <Text className="text-white text-2xl font-semibold">SignIn</Text>
+        <Text className="text-white text-2xl font-semibold">Sign In</Text>
         <TextInput onChangeText={setEmail} value={email} placeholder="Email"
           className="py-2 px-2 my-4 bg-zinc-800 text-white text-base  rounded-md w-full placeholder:text-white"
         />
@@ -47,7 +47,7 @@ export default function SignIn() {
         <Pressable onPress={handleSignIn} className="bg-yellow-400 py-2 mb-4 w-full rounded-md">
           <Text className="text-center text-base font-semibold">Acessar</Text>
         </Pressable>
-        <Pressable onPress={()=>router.replace('/register')} className="bg-transparent py-2 mb-4 w-full rounded-md">
+        <Pressable onPress={()=>router.replace('/signUp')} className="bg-transparent py-2 mb-4 w-full rounded-md">
           <Text className="text-center text-base font-semibold text-white underline">Criar minha conta</Text>
         </Pressable>
         {showErrorMessage && (
