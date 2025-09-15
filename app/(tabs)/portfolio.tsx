@@ -23,7 +23,7 @@ export default function Portfolio() {
       {isPortfolioEmpty ? (
         <View className="flex-col justify-center items-center w-11/12 flex-1">
           <Text className="text-white opacity-70 text-center font-bold text-xl">Nenhuma carteira criada.</Text>
-          <Text className="text-white opacity-70 text-center font-bold text-xl">Peça ao seu assistente de IA para gerar uma e comece a ganhar dinheiro! {user?.monthlyAmount ?? 'UNDEFINED'}</Text>
+          <Text className="text-white opacity-70 text-center font-bold text-xl">Peça ao seu assistente de IA para gerar uma e comece a ganhar dinheiro! {user?.profileAssessment ?? 'UNDEFINED'}</Text>
         </View>
       ) : (
         <>

@@ -26,25 +26,25 @@ export default function ProfileAssessment() {
 
   const [selected, setSelected] = useState<string | null>(null);
 
-  const handleNext = () => {
-    changeUserProperty('profileAssessment', selected!);
-    console.log("User property:", user?.profileAssessment);
-    // router.push('/(onboarding)/monthlyAmount');
+  const handleFinish = () => {
+    changeUserProperty('isFirstAccess', false);
+    router.push('/(tabs)');
   }
-
+  
   const handlePrev = () => {
     router.back();
   }
-
+  
   const handleSelected = (option: {content: string, profileType: string}) => {
     setSelected(option.profileType);
+    changeUserProperty('profileAssessment', option.profileType);
   }
 
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={4}/>
+        <OnboardingProgress currentStep={5}/>
         <Image source={require('@/assets/images/onboarding-images/profileAssessment-image.png')} style={{width: 276, height: 276, marginBottom:16}}/>
 
         <Text className="text-white text-center font-semibold" style={{fontSize:26}}>Como você reagiria se sua carteira caísse 10% em 1 mês?</Text>
@@ -72,8 +72,8 @@ export default function ProfileAssessment() {
         </View>
 
         <View className="flex-col w-full justify-center items-center">
-          <Pressable onPress={handleNext} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
-            <Text className="text-center text-base font-semibold">Próximo</Text>
+          <Pressable onPress={handleFinish} className={`${selected === null && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={selected === null}>
+            <Text className="text-center text-base font-semibold">Finalizar</Text>
           </Pressable>
           <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
             <Text className="text-center text-base font-semibold text-white">Voltar</Text>

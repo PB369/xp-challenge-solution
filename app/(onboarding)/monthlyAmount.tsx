@@ -2,7 +2,7 @@ import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgre
 import { useUser } from "@/context/UserContex";
 import '@/global.css';
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
 
 export default function MonthlyAmount() {
@@ -11,26 +11,20 @@ export default function MonthlyAmount() {
 
   const [monthlyAmount, setMonthlyAmount] = useState<string>("");
 
-  const handleFinish = () => {
+  const handleNext = () => {
     changeUserProperty('monthlyAmount', monthlyAmount);
-    changeUserProperty('isFirstAccess', false);
-    console.log("User property:", user?.monthlyAmount);
-    // router.replace('/(tabs)');
+    router.replace('/(onboarding)/profileAssessment');
   }
 
   const handlePrev = () => {
     router.back();
   }
 
-  useEffect(() => {
-  console.log("User atualizado:", user?.monthlyAmount);
-}, [user]);
-
   return (
     <View className="flex-1 justify-center items-center bg-black w-full"
     >
       <View className="w-4/5 justify-center items-center">
-        <OnboardingProgress currentStep={5}/>
+        <OnboardingProgress currentStep={4}/>
 
         <Image source={require('@/assets/images/onboarding-images/monthlyAmount-image.png')} style={{width: 258, height: 258, marginBottom:16}}/>
 
@@ -46,8 +40,8 @@ export default function MonthlyAmount() {
         </View>
 
         <View className="flex-col w-full justify-center items-center">
-          <Pressable onPress={handleFinish} className={`${monthlyAmount.length===0 && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={monthlyAmount.length===0}>
-            <Text className="text-center text-base font-semibold">Finalizar</Text>
+          <Pressable onPress={handleNext} className={`${monthlyAmount.length===0 && 'opacity-70'} bg-yellow-400 my-2 py-2 w-full rounded-md`} disabled={monthlyAmount.length===0}>
+            <Text className="text-center text-base font-semibold">Próximo</Text>
           </Pressable>
           <Pressable onPress={handlePrev} className={'my-2 py-2 w-[20%]'}>
             <Text className="text-center text-base font-semibold text-white">Voltar</Text>

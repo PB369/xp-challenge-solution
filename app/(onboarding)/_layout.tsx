@@ -8,8 +8,8 @@ export default function OnboardingLayout() {
       <Stack.Screen name="goal" />
       <Stack.Screen name="timeOfInvestment" />
       {/* <Stack.Screen name="initialAmount" /> */}
-      <Stack.Screen name="profileAssessment" />
       <Stack.Screen name="monthlyAmount" />
+      <Stack.Screen name="profileAssessment" />
     </Stack>
   )
 }

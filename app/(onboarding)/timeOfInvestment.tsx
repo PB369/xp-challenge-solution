@@ -1,9 +1,9 @@
-import { Image, Pressable, Text, View } from "react-native";
+import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { useUser } from "@/context/UserContex";
 import '@/global.css';
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { useUser } from "@/context/UserContex";
-import OnboardingProgress from "@/components/OnboardingProgress/OnboardingProgress";
+import { Image, Pressable, Text, View } from "react-native";
 
 export default function TimeOfInvestment() {
   const { changeUserProperty } = useUser();
@@ -15,7 +15,7 @@ export default function TimeOfInvestment() {
 
   const handleNext = () => {
     changeUserProperty('timeOfInvestment', selected!);
-    router.push('/(onboarding)/profileAssessment');
+    router.push('/(onboarding)/monthlyAmount');
   }
 
   const handlePrev = () => {
