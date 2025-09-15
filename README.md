@@ -14,7 +14,7 @@ Ele também é destinado para automatizar e facilitar a geração de carteiras d
 
 ## 📦 Tecnologias Utilizadas
 
-- **React Native** com **Expo**
+- **React Native** com **`Expo`**
 - **TypeScript**
 - **Expo Router**
 - **Context API**
