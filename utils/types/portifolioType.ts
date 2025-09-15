@@ -9,10 +9,7 @@ export type PortfolioAssetType = {
   whyThisAsset: string;
 
   profitability: string,
-  benefitTags: {
-    iconName: string,
-    content: string
-  }[],
+  benefitTags: string[],
   details: {
     issuing: string,
     indexer: string,

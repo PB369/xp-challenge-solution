@@ -1,22 +1,25 @@
 import ProgressBar from "@/components/ProgressBar/ProgressBar";
 import { useUser } from "@/context/UserContex";
-import { Image, Pressable, Text, View } from "react-native";
 import Octicons from '@expo/vector-icons/Octicons';
+import { Image, Pressable, Text, View } from "react-native";
 
 const GoalTracker = () => {
   const { user } = useUser();
+  const portfoliosList = user?.portfolios || [];
+  const portfolio = portfoliosList[0];
+  const isPortfolioEmpty = portfoliosList.length === 0;
 
   return (
     <View className="w-11/12 rounded-lg bg-neutral-800 flex justify-center items-center my-3 p-3">
       <View className="w-full">
         <Text className="text-white text-lg"><Text className="font-bold">Meta:</Text> {user?.goal}</Text>
-        <Text className="my-2 text-base text-white">Valor alvo: <Text className="font-bold">Indefinido</Text></Text>
+        <Text className="my-2 text-base text-white">Valor alvo: <Text className="font-bold">{isPortfolioEmpty ? 'Indefinido' : `R$ ${portfolio.totalValue}`}</Text></Text>
       </View>
       <View className="w-full">
-        <ProgressBar progressPercentage={10} widthInPercentage={88}>
+        <ProgressBar progressPercentage={0} widthInPercentage={88}>
           <View className="flex ml-4">
             <Image source={require('@/assets/images/icons/flagCheck-icon.png')}/>
-            <Text className="text-white font-bold text-base">10%</Text>
+            <Text className="text-white font-bold text-base">0%</Text>
           </View>
         </ProgressBar>
       </View>

@@ -23,7 +23,7 @@ const PortfolioResume = ({ portfolio }: Props) => {
       <View className="border-b border-b-neutral-500 flex flex-row w-full py-3 px-2 justify-between items-center">
         <View className="flex flex-row justify-center items-center">
           <MaterialIcons name="currency-exchange" size={20} color="#0DFF00" />
-          <Text className="text-white font-medium ml-2">Montante Total Estimado:</Text>
+          <Text className="text-white font-medium ml-2">Total a Investir:</Text>
         </View>
         <Text className="text-white">R${portfolio.totalValue}</Text>
       </View>

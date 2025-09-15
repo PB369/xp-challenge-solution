@@ -1,17 +1,17 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
-import {  Pressable, ScrollView, View } from "react-native";
-import Feather from '@expo/vector-icons/Feather';
-import { Asset } from "@/utils/types/assetType";
-import AssetHeader from "@/components/AssetExplanationPageComponents/AssetHeader/AssetHeader";
-import MainSection from "@/components/AssetExplanationPageComponents/MainSection/MainSection";
 import AssetDetails from "@/components/AssetExplanationPageComponents/AssetDetails/AssetDetails";
+import AssetHeader from "@/components/AssetExplanationPageComponents/AssetHeader/AssetHeader";
 import ExternalResources from "@/components/AssetExplanationPageComponents/ExternalResources/ExternalResources";
+import MainSection from "@/components/AssetExplanationPageComponents/MainSection/MainSection";
+import { PortfolioAssetType } from "@/utils/types/portifolioType";
+import Feather from '@expo/vector-icons/Feather';
+import { useLocalSearchParams, useRouter } from "expo-router";
+import { Pressable, ScrollView, View } from "react-native";
 
 export default function AssetExplanation() {
   const { id } = useLocalSearchParams();
-  const router = useRouter()
+  const router = useRouter();
 
-  const asset: Asset = JSON.parse(id as string);
+  const asset: PortfolioAssetType = JSON.parse(id as string);
 
   return (
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>

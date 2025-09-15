@@ -1,4 +1,3 @@
-import { assets } from "@/utils/mockedData/mockedAssets";
 import { PortfolioType } from "@/utils/types/portifolioType";
 import { Link } from "expo-router";
 import { Text, View } from "react-native";
@@ -8,16 +7,17 @@ type Props = {
 }
 
 const FinancialAssets = ({ portfolio }: Props) => {
+  const assets = portfolio.assets
 
   return (
     <View className="w-11/12 flex justify-center items-center my-3">
       <Text className="text-white font-semibold text-2xl w-full">Ativos Detalhados</Text>
       {assets.map(asset => (
         <View key={assets.indexOf(asset)} className="w-full rounded-md bg-neutral-800 flex justify-center items-center my-3 py-3 px-4">
-          <Text className="text-white text-xl font-semibold self-start">{asset.name}</Text>
+          <Text className="text-white text-xl font-semibold self-start">{asset.assetName}</Text>
           <View className="flex flex-row w-full my-1 justify-between items-center">
             <Text className="text-white">Ativo:</Text>
-            <Text className="text-white">{asset.class}</Text>
+            <Text className="text-white">{asset.type}</Text>
           </View>
           <View className="flex flex-row w-full my-1 justify-between items-center">
             <Text className="text-white">Rentabilidade:</Text>

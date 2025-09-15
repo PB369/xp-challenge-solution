@@ -33,7 +33,7 @@ export default function MonthlyAmount() {
         <View className="w-full my-4">
           <TextInput 
             value={monthlyAmount} 
-            onChangeText={e=>{setMonthlyAmount(e);console.log(e, monthlyAmount)}}
+            onChangeText={setMonthlyAmount}
             placeholder="Digite o valor"
             className="text-white placeholder:text-white border-b-2 border-white text-center"
           /> 

@@ -183,7 +183,7 @@ export default function IAChat() {
 
           aiMessage = {
             role: "model",
-            content: "Sua carteira de investimento foi criada e está pronta para ser usada! Acesse a página Carteira para vizualizá-la."
+            content: "Sua carteira de investimento foi criada e está pronta para ser usada! Acesse a página Carteira para visualizá-la."
           };
 
         } else if (parsed.action === "chat") {
@@ -213,7 +213,6 @@ export default function IAChat() {
       });
 
       setMessages(prev => [...prev, aiMessage]);
-      setChat(prev => [...prev, aiMessage]);
 
     } catch (err) {
       console.error("Erro ao enviar mensagem para IA:", err);
@@ -238,11 +237,11 @@ export default function IAChat() {
             })}
           </View>}
           {chat.length > 0 && <Chat messages={chat} />}
-          <View style={styles.horizontalSugestions}>
+          {chat.length === 0 && <View style={styles.horizontalSugestions}>
             {verticalSugestions.map((value: string) => {
               return (<TextButton key={value} text={value} style={styles.horizontalSugestionButton} onClick={() => setTextValue(value)} />);
             })}
-          </View>
+          </View>}
           <ChatTextField value={textValue} onChangeText={setTextValue} onSubmit={send} />
         </View>
     </KeyboardAvoidingView>

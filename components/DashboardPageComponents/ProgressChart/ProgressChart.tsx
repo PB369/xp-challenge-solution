@@ -1,3 +1,4 @@
+import { useUser } from "@/context/UserContex";
 import { useState } from "react";
 import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import { BarChart } from 'react-native-gifted-charts';
@@ -6,39 +7,39 @@ const screenWidth = Dimensions.get('window').width;
 
 const dataByPeriod = {
   Dia: [
-    { value: 10 }, 
-    { value: 20 }, 
-    { value: 15 }, 
-    { value: 30 }, 
-    { value: 20 }, 
-    { value: 15 }, 
-    { value: 30 },
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 },
   ],
 
   Semana: [
-    { value: 20 }, 
-    { value: 30 }, 
-    { value: 40 }, 
-    { value: 50 },
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 },
   ],
   
   Mês: [
-    { value: 35 }, 
-    { value: 60 }, 
-    { value: 55 }, 
-    { value: 40 }, 
-    { value: 90 }, 
-    { value: 70 }, 
-    { value: 20 }, 
-    { value: 55 }, 
-    { value: 40 }, 
-    { value: 90 }, 
-    { value: 70 }, 
-    { value: 20 },
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 }, 
+    { value: 0 },
   ],
   
   Ano: [
-    { value: 50 },
+    { value: 0 },
   ],
 };
 
@@ -59,6 +60,8 @@ const ProgressChart = () => {
   const barWidth = 25;
   const spacing = 15;
 
+  const { user } = useUser();
+
   return (
    <View className="w-full flex justify-center items-center my-3">
     <View className="w-11/12 pb-4 flex flex-row justify-between items-center">
@@ -67,10 +70,10 @@ const ProgressChart = () => {
     </View>
     <View className="w-11/12 mb-4 flex flex-row justify-between items-center">
       <View className="flex flex-row justify-center items-center">
-        <Text className="text-white text-3xl font-bold mr-2">$ 18.567</Text>
-        <Text className="text-[#0DFF00] text-base font-semibold">+14%</Text>
+        <Text className="text-white text-3xl font-bold mr-2">$ {user?.monthlyAmount}</Text>
+        <Text className="text-[#0DFF00] text-base font-semibold">+0%</Text>
       </View>
-      <Text className="text-[#0DFF00] text-xl font-semibold">$ +2599.38</Text>
+      <Text className="text-[#0DFF00] text-xl font-semibold">$ +0.00</Text>
     </View>
     <View className="flex flex-col justify-center items-center bg-neutral-800 py-8 px-5 rounded-lg w-11/12">
       {/* Chart */}

@@ -1,6 +1,6 @@
 import ProgressBar from "@/components/ProgressBar/ProgressBar";
 import { PortfolioType } from "@/utils/types/portifolioType";
-import { Image, Text, View } from "react-native"
+import { Image, Text, View } from "react-native";
 
 type Props = {
   portfolio: PortfolioType,
@@ -24,6 +24,7 @@ const BenchmarkComparison = ({ portfolio }: Props) => {
             bgOfBackBar="#3c3c3c"
             bgOfFrontBar="#268c41"
             height={18}
+            borderRadius={6}
           />
         </View>
         <View className="w-full flex justify-center items-center mb-4">
@@ -32,9 +33,11 @@ const BenchmarkComparison = ({ portfolio }: Props) => {
             <Text className="text-white">+11.5%</Text>
           </View>
           <ProgressBar 
-            progressPercentage={0} 
+            progressPercentage={80} 
             bgOfBackBar="#3c3c3c"
+            bgOfFrontBar="#A71B0F"
             height={18}
+            borderRadius={6}
           />
         </View>
         <View className="w-full flex justify-center items-center mb-4">
@@ -47,6 +50,7 @@ const BenchmarkComparison = ({ portfolio }: Props) => {
             bgOfBackBar="#3c3c3c"
             bgOfFrontBar="#929292"
             height={18}
+            borderRadius={6}
             />
         </View>
         <Text className="text-white text-justify">Sua carteira está projetada abaixo do CDI, mas adequada ao seu perfil e objetivo de longo prazo</Text>

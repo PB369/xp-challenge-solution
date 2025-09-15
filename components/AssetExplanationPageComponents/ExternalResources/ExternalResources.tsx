@@ -1,10 +1,10 @@
-import { Text, View } from "react-native";
-import '@/global.css'
-import { Asset } from "@/utils/types/assetType";
+import '@/global.css';
+import { PortfolioAssetType } from "@/utils/types/portifolioType";
 import { Octicons } from "@expo/vector-icons";
+import { Text, View } from "react-native";
 
 type Props = {
-  asset: Asset,
+  asset: PortfolioAssetType,
 }
 
 const ExternalResources = ({asset}: Props) => {
@@ -20,7 +20,7 @@ const ExternalResources = ({asset}: Props) => {
             key={asset.externalResources.indexOf(resource)}
             className="flex flex-row flex-wrap"
           >
-            <Text className="text-white font-semibold text-lg">{resource.title}: 
+            <Text className="text-white font-semibold text-lg">{resource.title}:{" "}
               <Text className="text-yellow-400 font-semibold text-lg"> 
                 {resource.source}
               </Text>

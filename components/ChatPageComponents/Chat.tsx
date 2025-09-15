@@ -19,7 +19,7 @@ export default function Chat({ messages }: Props) {
           key={index}
           style={message.role === "user" ? styles.messageUserRow : styles.messageAIRow}
         >
-          <View style={message.role === "user" ? styles.messageUser : styles.messageAI}>
+          <View style={message.role === "user" ? styles.messageUser : message.content === "<loading>" ? styles.messageAILoading :  styles.messageAI}>
             {message.content === "<loading>" && message.role === "model" ? (
               <LoadingMessage />
             ) : (
@@ -70,5 +70,12 @@ const styles = StyleSheet.create({
   },
   messageAIText: {
     color: darkGray,
+  },
+  messageAILoading: {
+    width: "10%",
+    backgroundColor: mainYello,
+    borderRadius: 20,
+    padding: 10,
+    marginTop: 10,
   },
 });

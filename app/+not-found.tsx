@@ -1,4 +1,4 @@
-import { Link, Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
 
 export default function NotFoundScreen() {
@@ -8,12 +8,12 @@ export default function NotFoundScreen() {
     <>
       {/* <Stack.Screen options={{ title: "Oops! This screen doesn't exist." }} /> */}
       <View className='flex-1 justify-center items-center bg-black'>
-        <Text className='text-white text-2xl font-semibold mb-4'>This page does not exist.</Text>
+        <Text className='text-white text-2xl font-semibold mb-4'>Esta página não existe.</Text>
         <Pressable 
           onPress={()=>router.push('/(tabs)')}
           className='bg-yellow-400 my-2 py-2 px-4 rounded-md'
         >
-          <Text className='font-medium text-lg'>Go to Home</Text>
+          <Text className='font-medium text-lg'>Retornar para Início</Text>
         </Pressable>
       </View>
     </>

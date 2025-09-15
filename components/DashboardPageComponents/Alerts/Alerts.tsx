@@ -1,11 +1,11 @@
-import { Image, Pressable, Text, View } from "react-native";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { Image, Pressable, Text, View } from "react-native";
 
 const Alerts = () => {
   const alertsList = [
-    {category: 'market', content: 'Mudança na Selic: veja como isso afeta sua carteira'}, 
+    {category: 'market', content: 'Mudança na Selic: veja como isso pode te afetar'}, 
     {category: 'profile', content: 'Seu perfil mudou? Refaça o questionário.'}, 
-    {category: 'wallet', content: 'É hora de rebalançear sua carteira'},
+    {category: 'wallet', content: 'É hora de criar a sua nova carteira!'},
   ]
 
   const alertsIconByCategory: Record<string, any> = {

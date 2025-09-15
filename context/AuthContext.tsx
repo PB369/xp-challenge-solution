@@ -1,8 +1,7 @@
 import { User } from "@/utils/types/userType";
+import { getUser, removeUser, saveUser } from "@/utils/userHelper";
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useUser } from "./UserContex";
-import { getUser, saveUser, removeUser } from "@/utils/userHelper";
-import { useRouter } from "expo-router";
 
 type AuthContextType = {
   user: User | null;
@@ -53,7 +52,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const loginUser: User = {
         ...storedUser,
         isAuthenticated: true,
-        isFirstAccess: user === null,
       }
   
       await saveUser(loginUser);

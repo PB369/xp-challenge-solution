@@ -1,9 +1,9 @@
+import '@/global.css';
+import { PortfolioAssetType } from "@/utils/types/portifolioType";
 import { StyleSheet, Text, View } from "react-native";
-import '@/global.css'
-import { Asset } from "@/utils/types/assetType";
 
 type Props = {
-  asset: Asset,
+  asset: PortfolioAssetType,
 }
 
 const AssetDetails = ({asset}: Props) => {
@@ -24,7 +24,7 @@ const AssetDetails = ({asset}: Props) => {
         </View>
         <View className="flex flex-row border-b border-b-white justify-center items-stretch">
           <Text style={styles.leftCell}>Data de Vencimento</Text>
-          <Text style={styles.rightCell}>{details.expirationDate}</Text>
+          <Text style={styles.rightCell}>{details.expirationDate ? details.expirationDate : "Sem data"}</Text>
         </View>
         <View className="flex flex-row border-b border-b-white justify-center items-stretch ver">
           <Text style={styles.leftCell}>Tipo de Remuneração</Text>

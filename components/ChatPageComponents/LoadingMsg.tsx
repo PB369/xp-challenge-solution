@@ -1,3 +1,4 @@
+import '@/global.css';
 import { useEffect, useState } from "react";
 import { Text } from "react-native";
 
@@ -11,7 +12,7 @@ const LoadingMessage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return <Text style={{ color: "white", fontSize: 16 }}>{dots}</Text>;
+  return <Text className="text-lg text-black font-semibold">{dots}</Text>;
 };
 
 export default LoadingMessage;
