@@ -1,4 +1,4 @@
-name: SonarQube SAST Analysis
+name: SonarCloud SAST Analysis
 
 on:
   push:
@@ -9,12 +9,13 @@ on:
       - main
 
 jobs:
-  sonarqube:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # necessário para que o SonarCloud analise histórico de commits
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -24,15 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Caso use Jest para testes + cobertura
-      - name: Run tests with coverage
+      # Se você já usa Jest
+      - name: Run tests
         run: npm test -- --coverage
 
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=meuapp-mobile
-            -Dsonar.sources=.
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub gera automaticamente
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
