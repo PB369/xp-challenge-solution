@@ -12,7 +12,7 @@ const LoadingMessage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return <Text className="text-lg text-black font-semibold">{dots}</Text>;
+  return <Text className="text-xl text-black font-semibold">{dots}</Text>;
 };
 
 export default LoadingMessage;
