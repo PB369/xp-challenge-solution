@@ -1,0 +1,36 @@
+name: DAST Scan with OWASP ZAP
+
+on:
+  workflow_dispatch:   # executa manualmente
+  push:
+    branches:
+      - main           # ou outra branch de CD
+
+jobs:
+  dast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # Se seu backend precisa rodar com Docker
+      - name: Subir aplicação no Docker
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          sleep 15   # espera app subir
+
+      # Rodar OWASP ZAP baseline scan
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          docker run --network host \
+            -v $(pwd):/zap/wrk/:rw \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t http://localhost:3001 -r report.html -I
+
+      # Publicar relatório como artefato
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-dast-report
+          path: report.html
