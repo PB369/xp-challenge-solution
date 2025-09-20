@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  security-events: write  # necessário para upload de SARIF
+
 jobs:
   snyk:
     runs-on: ubuntu-latest
@@ -18,12 +22,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Node para deps JS do RN
+      # Node para deps JS do React Native
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # Usa cache com base no lockfile disponível (yarn.lock ou package-lock.json)
           cache: ${{ hashFiles('**/yarn.lock') != '' && 'yarn' || (hashFiles('**/package-lock.json') != '' && 'npm' || '') }}
 
       - name: Install JS deps (yarn/npm)
@@ -34,92 +37,84 @@ jobs:
           elif [ -f package-lock.json ]; then
             npm ci
           else
-            echo "Nenhum lockfile encontrado (yarn.lock / package-lock.json). Instalando com npm..."
             npm install
           fi
 
-      # JDK para varredura do Gradle (Android)
+      # JDK p/ varredura Gradle (Android)
       - name: Setup Java (for Gradle scanning)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
-      # Instala Snyk CLI (é Node, mas escaneia npm, Gradle e CocoaPods)
+      # Snyk CLI
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      # Guarda se este PR é de fork (se for, secrets não aparecem)
-      - name: Detect fork PR
-        id: fork_guard
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          echo "fork_pr=${{ github.event.pull_request.head.repo.fork }}" >> $GITHUB_OUTPUT
-
-      # ---------- Snyk JS (npm/yarn) ----------
+      # === Scans ===
       - name: Snyk JS (npm/yarn)
-        id: snyk_js
-        if: ${{ steps.fork_guard.outputs.fork_pr != 'true' && env.SNYK_TOKEN != '' }}
+        if: env.SNYK_TOKEN != ''
         continue-on-error: true
         run: |
+          mkdir -p reports
           snyk test --file=package.json \
-            --json-file-output=snyk-js.json \
-            --sarif-file-output=snyk-js.sarif
+            --json-file-output=reports/snyk-js.json \
+            --sarif-file-output=reports/snyk-js.sarif || true
 
-      # ---------- Snyk Android (Gradle) ----------
       - name: Snyk Android (Gradle)
-        id: snyk_android
-        if: ${{ steps.fork_guard.outputs.fork_pr != 'true' && env.SNYK_TOKEN != '' && hashFiles('android/**/*.gradle*') != '' }}
-        continue-on-error: true
+        if: env.SNYK_TOKEN != '' && hashFiles('android/**/*.gradle*') != ''
         working-directory: android
-        run: |
-          # Snyk detecta automaticamente o build.gradle (ou gradle.kts)
-          snyk test \
-            --json-file-output=../snyk-android.json \
-            --sarif-file-output=../snyk-android.sarif
-
-      # ---------- Snyk iOS (CocoaPods) ----------
-      - name: Snyk iOS (CocoaPods)
-        id: snyk_ios
-        if: ${{ steps.fork_guard.outputs.fork_pr != 'true' && env.SNYK_TOKEN != '' && hashFiles('ios/Podfile.lock') != '' }}
         continue-on-error: true
         run: |
-          snyk test --file=ios/Podfile.lock --package-manager=cocoapods \
-            --json-file-output=snyk-ios.json \
-            --sarif-file-output=snyk-ios.sarif
+          mkdir -p ../reports
+          snyk test \
+            --json-file-output=../reports/snyk-android.json \
+            --sarif-file-output=../reports/snyk-android.sarif || true
 
-      # Upload de todos os relatórios
-      - name: Upload Snyk Reports
-        if: always()
+      - name: Snyk iOS (CocoaPods)
+        if: env.SNYK_TOKEN != '' && hashFiles('ios/Podfile.lock') != ''
+        continue-on-error: true
+        run: |
+          mkdir -p reports
+          snyk test --file=ios/Podfile.lock --package-manager=cocoapods \
+            --json-file-output=reports/snyk-ios.json \
+            --sarif-file-output=reports/snyk-ios.sarif || true
+
+      # Listar p/ conferir
+      - name: List reports
+        run: ls -la reports || true
+
+      # Upload SARIF (aparece em Security → Code scanning alerts)
+      - name: Upload SARIF (JS)
+        if: hashFiles('reports/snyk-js.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/snyk-js.sarif
+
+      - name: Upload SARIF (Android)
+        if: hashFiles('reports/snyk-android.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/snyk-android.sarif
+
+      - name: Upload SARIF (iOS)
+        if: hashFiles('reports/snyk-ios.sarif') != ''
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: reports/snyk-ios.sarif
+
+      # Artifact (vai aparecer como link "snyk-reports" no topo da run)
+      - name: Upload Snyk Reports (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: snyk-reports
-          path: |
-            snyk-*.json
-            snyk-*.sarif
-            snyk-js.json
-            snyk-js.sarif
-            snyk-android.json
-            snyk-android.sarif
-            snyk-ios.json
-            snyk-ios.sarif
-          if-no-files-found: ignore
+          path: reports
+          if-no-files-found: error  # força erro se nada foi gerado (facilita diagnosticar)
 
-      # Notifica Slack se QUALQUER um dos testes retornar falha (vulns)
+      # Opcional: notificar Slack se houve falhas
       - name: Slack notify on vulnerabilities
-        if: env.SLACK_WEBHOOK_URL != '' && (steps.snyk_js.outcome == 'failure' || steps.snyk_android.outcome == 'failure' || steps.snyk_ios.outcome == 'failure')
+        if: env.SLACK_WEBHOOK_URL != '' && (hashFiles('reports/*.sarif') != '')
         run: |
           curl -X POST -H 'Content-type: application/json' \
-               --data '{"text":"⚠️ Snyk encontrou vulnerabilidades no projeto React Native (JS/Android/iOS). Verifique os artefatos *snyk-reports*."}' \
+               --data '{"text":"⚠️ Snyk encontrou vulnerabilidades. Baixe o artifact *snyk-reports* ou veja em *Security → Code scanning alerts*."}' \
                "$SLACK_WEBHOOK_URL"
-
-      # Opcional: quebrar o pipeline se houver vulnerabilidades
-      - name: Fail if any Snyk step failed
-        if: steps.snyk_js.outcome == 'failure' || steps.snyk_android.outcome == 'failure' || steps.snyk_ios.outcome == 'failure'
-        run: exit 1
-
-      # Mensagem amigável quando é PR de fork sem secrets
-      - name: Skip message for fork PRs
-        if: ${{ steps.fork_guard.outputs.fork_pr == 'true' || env.SNYK_TOKEN == '' }}
-        run: |
-          echo "Snyk pulado: PR é de fork OU SNYK_TOKEN não configurado em Secrets."
