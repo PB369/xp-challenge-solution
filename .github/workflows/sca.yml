@@ -1,0 +1,64 @@
+name: SCA Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Authenticate Snyk
+        run: snyk auth "${SNYK_TOKEN}"
+
+      - name: Run Snyk to check for vulnerabilities
+        id: snyk
+        continue-on-error: true
+        run: |
+          snyk test --all-projects \
+            --json-file-output=snyk-report.json \
+            --sarif-file-output=snyk-report.sarif
+
+      - name: Upload Snyk Report as Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-report
+          path: |
+            snyk-report.json
+            snyk-report.sarif
+
+      - name: Send Slack notification if vulnerabilities found
+        if: steps.snyk.outcome == 'failure'
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"⚠️ Vulnerabilidade crítica/alta detectada no projeto Python. Veja o artefato snyk-report."}' \
+            "$SLACK_WEBHOOK_URL"
+
+      - name: Fail if Snyk found issues (re-fail)
+        if: steps.snyk.outcome == 'failure'
+        run: exit 1
