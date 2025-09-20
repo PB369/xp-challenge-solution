@@ -1,0 +1,96 @@
+name: Security CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ---------- SAST (SonarCloud) ----------
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=your_project_key
+            -Dsonar.organization=your_org
+            -Dsonar.sources=.
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      # ---------- Build / Start Backend & Frontend ----------
+      - name: Start Application via Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d
+          sleep 20  # espera app subir
+
+      # ---------- DAST (OWASP ZAP) ----------
+      - name: Start ngrok (expose local server)
+        run: |
+          curl -s https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip -o ngrok.zip
+          unzip ngrok.zip
+          ./ngrok authtoken $NGROK_AUTH_TOKEN
+          nohup ./ngrok http 3001 > ngrok.log &
+          sleep 5
+          NGROK_URL=$(grep -oP 'https://[a-z0-9\-]+\.ngrok.io' ngrok.log | head -1)
+          echo "NGROK_URL=$NGROK_URL" >> $GITHUB_ENV
+
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          docker run --network host \
+            -v $(pwd):/zap/wrk/:rw \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py -t ${{ env.NGROK_URL }} -r zap-report.html -I
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap-report.html
+
+      # ---------- SCA (Snyk) ----------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --all-projects --severity-threshold=high --json-file-output=snyk-report.json
+
+      - name: Upload Snyk Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: snyk-report
+          path: snyk-report.json
+
+      # ---------- Fail on critical vulnerabilities ----------
+      - name: Fail on Critical Issues
+        run: |
+          CRITICAL=$(jq '.vulnerabilities[] | select(.severity=="critical")' snyk-report.json)
+          if [ ! -z "$CRITICAL" ]; then
+            echo "Critical SCA vulnerabilities found, failing the pipeline."
+            exit 1
+          fi
+          # opcional: adicionar verificação de vulnerabilidades críticas ZAP / Sonar
