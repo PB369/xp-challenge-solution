@@ -1,4 +1,4 @@
-name: SCA Pipeline (React Native)
+name: SCA - Snyk Scan
 
 on:
   push:
@@ -6,121 +6,35 @@ on:
   pull_request:
     branches: [ main ]
 
-permissions:
-  contents: read
-  security-events: write   # necessário para subir SARIF quando permitido
-
 jobs:
   snyk:
     runs-on: ubuntu-latest
 
-    env:
-      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}           # crie em Settings > Secrets and variables > Actions
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      SNYK_CFG_DISABLE_ANALYTICS: '1'
-
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      # Instalar dependências do projeto
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: ${{ hashFiles('**/yarn.lock') != '' && 'yarn' || (hashFiles('**/package-lock.json') != '' && 'npm' || '') }}
+          node-version: 18
 
-      - name: Install JS deps (yarn/npm)
-        run: |
-          if [ -f yarn.lock ]; then
-            corepack enable
-            yarn install --frozen-lockfile
-          elif [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+      - name: Install dependencies
+        run: npm install
 
-      - name: Setup Java (for Gradle scanning)
-        uses: actions/setup-java@v4
+      # Rodar o Snyk
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          distribution: temurin
-          java-version: 17
+          command: test
+          args: --all-projects --severity-threshold=low --json-file-output=snyk-report.json
 
-      - name: Install Snyk CLI
-        run: npm install -g snyk
-
-      # ---- Auth Snyk (não interativo) ----
-      - name: Snyk auth (non-interactive)
-        run: |
-          if [ -z "$SNYK_TOKEN" ]; then
-            echo "SNYK_TOKEN ausente em Secrets. Configure em Settings > Secrets and variables > Actions."
-            exit 1
-          fi
-          snyk --version
-          snyk auth "$SNYK_TOKEN"
-          mkdir -p reports
-
-      # ---- Scans ----
-      - name: Snyk JS (npm/yarn)
-        continue-on-error: true
-        run: |
-          snyk test --file=package.json \
-            --json-file-output=reports/snyk-js.json \
-            --sarif-file-output=reports/snyk-js.sarif || true
-          ls -la reports || true
-
-      - name: Snyk Android (Gradle)
-        if: hashFiles('android/**/*.gradle*') != ''
-        working-directory: android
-        continue-on-error: true
-        run: |
-          mkdir -p ../reports
-          snyk test \
-            --json-file-output=../reports/snyk-android.json \
-            --sarif-file-output=../reports/snyk-android.sarif || true
-          ls -la ../reports || true
-
-      - name: Snyk iOS (CocoaPods)
-        if: hashFiles('ios/Podfile.lock') != ''
-        continue-on-error: true
-        run: |
-          snyk test --file=ios/Podfile.lock --package-manager=cocoapods \
-            --json-file-output=reports/snyk-ios.json \
-            --sarif-file-output=reports/snyk-ios.sarif || true
-          ls -la reports || true
-
-      # ---- Upload SARIF para Security (apenas quando for permitido) ----
-      # Repo público E não é PR de fork
-      - name: Upload SARIF (JS)
-        if: ${{ !github.event.repository.private && (github.event_name == 'push' || github.event.pull_request.head.repo.fork == false) && hashFiles('reports/snyk-js.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: reports/snyk-js.sarif
-
-      - name: Upload SARIF (Android)
-        if: ${{ !github.event.repository.private && (github.event_name == 'push' || github.event.pull_request.head.repo.fork == false) && hashFiles('reports/snyk-android.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: reports/snyk-android.sarif
-
-      - name: Upload SARIF (iOS)
-        if: ${{ !github.event.repository.private && (github.event_name == 'push' || github.event.pull_request.head.repo.fork == false) && hashFiles('reports/snyk-ios.sarif') != '' }}
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: reports/snyk-ios.sarif
-
-      # ---- Artifact (sempre que houver arquivo) ----
-      - name: Upload Snyk Reports (Artifact)
+      # Publicar relatório nos artifacts
+      - name: Upload Snyk report
         uses: actions/upload-artifact@v4
         with:
-          name: snyk-reports
-          path: reports
-          if-no-files-found: error
-
-      # ---- Slack opcional ----
-      - name: Slack notify on vulnerabilities
-        if: env.SLACK_WEBHOOK_URL != '' && (hashFiles('reports/*.sarif') != '')
-        run: |
-          curl -X POST -H 'Content-type: application/json' \
-               --data '{"text":"⚠️ Snyk encontrou vulnerabilidades. Baixe o artifact *snyk-reports* ou veja em *Security → Code scanning alerts* (se disponível)."}' \
-               "$SLACK_WEBHOOK_URL"
+          name: snyk-sca-report
+          path: snyk-report.json
