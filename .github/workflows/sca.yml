@@ -8,15 +8,15 @@ on:
 
 permissions:
   contents: read
-  security-events: write     # p/ subir SARIF em Security
+  security-events: write
 
 jobs:
   snyk:
     runs-on: ubuntu-latest
-
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SNYK_CFG_DISABLE_ANALYTICS: '1'
 
     steps:
       - name: Checkout
@@ -48,19 +48,19 @@ jobs:
       - name: Install Snyk CLI
         run: npm install -g snyk
 
-      # 🔐 Autentica explicitamente (garante que o token foi aplicado)
-      - name: Snyk auth
+      - name: Snyk auth (non-interactive)
         run: |
+          if [ -z "$SNYK_TOKEN" ]; then
+            echo "SNYK_TOKEN ausente em Secrets."
+            exit 1
+          fi
           snyk --version
           snyk auth "$SNYK_TOKEN"
           mkdir -p reports
 
-      # === Scans ===
       - name: Snyk JS (npm/yarn)
         continue-on-error: true
         run: |
-          echo "[SNYK-JS] CWD=$(pwd)"
-          test -f package.json && echo "package.json OK" || echo "SEM package.json"
           snyk test --file=package.json \
             --json-file-output=reports/snyk-js.json \
             --sarif-file-output=reports/snyk-js.sarif || true
@@ -71,7 +71,6 @@ jobs:
         working-directory: android
         continue-on-error: true
         run: |
-          echo "[SNYK-ANDROID] CWD=$(pwd)"
           mkdir -p ../reports
           snyk test \
             --json-file-output=../reports/snyk-android.json \
@@ -82,17 +81,11 @@ jobs:
         if: hashFiles('ios/Podfile.lock') != ''
         continue-on-error: true
         run: |
-          echo "[SNYK-IOS] CWD=$(pwd)"
           snyk test --file=ios/Podfile.lock --package-manager=cocoapods \
             --json-file-output=reports/snyk-ios.json \
             --sarif-file-output=reports/snyk-ios.sarif || true
           ls -la reports || true
 
-      # 📄 Mostra o que ficou na pasta
-      - name: List reports
-        run: ls -la reports || true
-
-      # 🔎 Sobe para Security (se existir)
       - name: Upload SARIF (JS)
         if: hashFiles('reports/snyk-js.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
@@ -111,15 +104,13 @@ jobs:
         with:
           sarif_file: reports/snyk-ios.sarif
 
-      # 📦 Artifact (aparece como link no topo da run)
       - name: Upload Snyk Reports (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: snyk-reports
           path: reports
-          if-no-files-found: error   # se não gerar nada, falha pra facilitar o diagnóstico
+          if-no-files-found: error
 
-      # (Opcional) alerta no Slack se tiver SARIF
       - name: Slack notify on vulnerabilities
         if: env.SLACK_WEBHOOK_URL != '' && (hashFiles('reports/*.sarif') != '')
         run: |
