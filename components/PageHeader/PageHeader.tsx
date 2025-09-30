@@ -1,8 +1,8 @@
-import { Image, Pressable, Text, View } from 'react-native';
-import '@/global.css';
-import { useUser } from '@/context/UserContex';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useAuth } from '@/context/AuthContext';
+import { useUser } from '@/context/UserContex';
+import '@/global.css';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Image, Pressable, Text, View } from 'react-native';
 
 const PageHeader = () => {
   const { user } = useUser();

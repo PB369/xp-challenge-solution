@@ -9,6 +9,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="timeOfInvestment" />
       <Stack.Screen name="monthlyAmount" />
       <Stack.Screen name="profileAssessment" />
+      <Stack.Screen name="createFirstPortfolio" />
     </Stack>
   )
 }

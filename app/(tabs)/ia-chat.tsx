@@ -4,6 +4,7 @@ import ChatTextField from '@/components/ChatPageComponents/ChatTextField';
 import TextButton from '@/components/ChatPageComponents/TextButton';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
+import { GEMINI_API_KEY } from '@/utils/geminiKey';
 import { Message } from '@/utils/types/messagesType';
 import { PortfolioType } from '@/utils/types/portifolioType';
 import { GoogleGenAI } from "@google/genai";
@@ -20,7 +21,6 @@ export default function IAChat() {
   const [textValue, setTextValue] = useState("");
   const [isResponseLoading, setIsResponseLoading] = useState(false);
   const { user, changeUserProperty, setUser } = useUser();
-  const GEMINI_API_KEY = "AIzaSyAsIdW9PJVgqMmfsgmzbo4pPx8D2sGVS7M";
 
   const sugestionValues: string[] = ["Crie um plano de investimento para 6 meses", "Crie uma nova carteira de investimentos para mim", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em investimento"];
 
@@ -156,7 +156,7 @@ export default function IAChat() {
       setIsResponseLoading(true);
       setChat(prev => [
         ...prev,
-        { role: "model", content: "<loading>" } // placeholder
+        { role: "model", content: "<loading>" }
       ]);
 
       const aiResponse = await ai.models.generateContent({
@@ -173,7 +173,6 @@ export default function IAChat() {
 
       try {
         const cleanedResponse = responseText.trim().replace(/^```json\s*/, '').replace(/```$/, '');
-
         const parsed = JSON.parse(cleanedResponse);
         console.log("Resposta:", parsed);
 
@@ -216,8 +215,21 @@ export default function IAChat() {
 
     } catch (err) {
       console.error("Erro ao enviar mensagem para IA:", err);
+
+      const errorMessage: Message = {
+        role: "model",
+        content: "Desculpe, estou enfrentando problemas técnicos e não consigo responder sua mensagem no momento. Tente novamente mais tarde."
+      };
+
+      setChat(prev => {
+        const withoutLoading = prev.filter(m => m.content !== "<loading>");
+        return [...withoutLoading, errorMessage];
+      });
+
+      setMessages(prev => [...prev, errorMessage]);
     }
   };
+
 
   return (
     <KeyboardAvoidingView

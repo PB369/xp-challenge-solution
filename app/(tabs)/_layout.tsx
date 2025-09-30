@@ -1,15 +1,17 @@
 import { mainBalck, mainWhite, mainYello } from "@/assets/colors/colors";
-import { useAuth } from "@/context/AuthContext";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { Redirect, Tabs } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-import '@/global.css'
 import PageHeader from "@/components/PageHeader/PageHeader";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useAuth } from "@/context/AuthContext";
+import '@/global.css';
+import { FontAwesome5 } from "@expo/vector-icons";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Redirect, Tabs, usePathname } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function TabsLayout() {
   const { user } = useAuth();
+  const pathname = usePathname();
+  const havePathCondition = pathname === "/" || pathname === "/portfolio";
 
   if(!user){
     return <Redirect href='/signIn'/>
@@ -24,6 +26,7 @@ export default function TabsLayout() {
         headerStyle: styles.header,
         headerTitle: () => <PageHeader/>,
         headerTitleAlign: 'left',
+        headerShown: havePathCondition,
       }}
     >
       <Tabs.Screen

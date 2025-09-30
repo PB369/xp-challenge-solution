@@ -66,7 +66,7 @@ const ProgressChart = () => {
    <View className="w-full flex justify-center items-center my-3">
     <View className="w-11/12 pb-4 flex flex-row justify-between items-center">
       <Text className="text-white text-lg">Aqui está seu progresso</Text>
-      <Text className="text-white">Ver saldos</Text>
+      {/* <Text className="text-white">Ver saldos</Text> */}
     </View>
     <View className="w-11/12 mb-4 flex flex-row justify-between items-center">
       <View className="flex flex-row justify-center items-center">
