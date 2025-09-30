@@ -70,7 +70,7 @@ const ProgressChart = () => {
     </View>
     <View className="w-11/12 mb-4 flex flex-row justify-between items-center">
       <View className="flex flex-row justify-center items-center">
-        <Text className="text-white text-3xl font-bold mr-2">$ {user?.monthlyAmount}</Text>
+        <Text className="text-white text-3xl font-bold mr-2"> {user?.monthlyAmount}</Text>
         <Text className="text-[#0DFF00] text-base font-semibold">+0%</Text>
       </View>
       <Text className="text-[#0DFF00] text-xl font-semibold">$ +0.00</Text>

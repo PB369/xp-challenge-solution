@@ -17,7 +17,7 @@ export default function Portfolio() {
     <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}} className="flex-1 bg-black">
       <View className="flex w-11/12 my-4 justify-center items-center">
         <Text className="text-white font-semibold text-3xl">Minha carteira</Text>
-        <Text className="text-white">Elaborada segundo o seu perfil de risco e seus objetivos</Text>
+        <Text className="text-white text-center">Elaborada segundo o seu perfil de risco e seus objetivos</Text>
       </View>
       {isPortfolioEmpty ? (
         <View className="flex-col justify-center items-center w-11/12 flex-1">
