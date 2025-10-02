@@ -8,11 +8,14 @@ const LastCourse = () => {
         <Image source={require('@/assets/images/courses-images/intro-fixed-income.png')} style={{width:100, height:100, marginRight:10}}/>
         <View className="flex-col flex-1 justify-center items-start">
           <Text className="text-white text-xl font-bold">Introdução à Renda Fixa</Text>
-          <Text className="text-yellow-500 text-md my-1">Sua carteira tem 60% em tesouro direto</Text>
+          <Text className="text-yellow-500 text-md my-1">Aprenda a investir em renda fixa de forma segura e simples.</Text>
           <Text className="text-neutral-500 text-sm font-semibold">12 min - Iniciante</Text>
         </View>
       </View>
-      <ProgressBar bgOfBackBar="3C3C3C" bgOfFrontBar="ffffff" progressPercentage={42} borderRadius={6} height={3} widthInPercentage={100}/>
+      <View className="flex-col justify-center items-center">
+        <Text className="text-neutral-400 self-end mb-1">42%</Text>
+        <ProgressBar bgOfBackBar="#3C3C3C" bgOfFrontBar="#ffffff" progressPercentage={42} borderRadius={6} height={3} widthInPercentage={100}/>
+      </View>
     </View>
   )
 }
