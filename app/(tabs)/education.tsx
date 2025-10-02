@@ -9,7 +9,7 @@ export default function Education(){
       <View className="flex-col w-11/12 h-full">
         <Text className="text-white text-2xl font-bold self-start mt-6">Meu Progresso</Text>
         <LastCourse/>
-        <Text className="text-white text-2xl font-semibold self-start">Catálogo</Text>
+        <Text className="text-white text-2xl font-semibold self-start mt-3">Catálogo</Text>
         <CoursesFilters/>
         <CourseCard/>
       </View>
