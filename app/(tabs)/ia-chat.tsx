@@ -17,7 +17,6 @@ import {
 } from "react-native";
 
 export default function IAChat() {
-
   const [textValue, setTextValue] = useState("");
   const [isResponseLoading, setIsResponseLoading] = useState(false);
   const { user, changeUserProperty, setUser } = useUser();

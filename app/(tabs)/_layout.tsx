@@ -77,6 +77,22 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="education"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="book" size={24} color={color} />
+          ),
+          tabBarLabel: ({ focused, color }) => (
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color, fontSize: 12 }}>Educação</Text>
+              {focused && (
+                <View style={styles.underline} />
+              )}
+            </View>
+          ),
+        }}
+      />
     </Tabs>
   );
 }
