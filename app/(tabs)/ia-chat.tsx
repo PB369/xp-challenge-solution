@@ -5,7 +5,7 @@ import TextButton from '@/components/ChatPageComponents/TextButton';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { GEMINI_API_KEY } from '@/utils/geminiKey';
-import { Message } from '@/utils/types/messagesType';
+import { MessageType } from '@/utils/types/messagesType';
 import { PortfolioType } from '@/utils/types/portifolioType';
 import { GoogleGenAI } from "@google/genai";
 import { useState } from 'react';
@@ -25,7 +25,7 @@ export default function IAChat() {
 
   const verticalSugestions: string[] = ["Ativos com meu perfil", "Notícias recentes"];
 
-  const [messages, setMessages] = useState<Message[]>([{
+  const [messages, setMessages] = useState<MessageType[]>([{
     role: "model",
     content: 
     `Você é um assistente financeiro integrado a um aplicativo de um projeto acadêmico.
@@ -129,7 +129,7 @@ export default function IAChat() {
     }`
   }]);
 
-  const [chat, setChat] = useState<Message[]>([]);
+  const [chat, setChat] = useState<MessageType[]>([]);
 
   const addPortfolio = (portfolio: PortfolioType) => {
     if(!user) return;
@@ -143,7 +143,7 @@ export default function IAChat() {
     try {
       const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-      const userMessage: Message = { role: "user", content: textValue };
+      const userMessage: MessageType = { role: "user", content: textValue };
 
       const updatedMessages = [...messages, userMessage];
       setMessages(updatedMessages);
@@ -168,7 +168,7 @@ export default function IAChat() {
 
       const responseText = aiResponse.text as string;
 
-      let aiMessage: Message;
+      let aiMessage: MessageType;
 
       try {
         const cleanedResponse = responseText.trim().replace(/^```json\s*/, '').replace(/```$/, '');
@@ -215,7 +215,7 @@ export default function IAChat() {
     } catch (err) {
       console.error("Erro ao enviar mensagem para IA:", err);
 
-      const errorMessage: Message = {
+      const errorMessage: MessageType = {
         role: "model",
         content: "Desculpe, estou enfrentando problemas técnicos e não consigo responder sua mensagem no momento. Tente novamente mais tarde."
       };

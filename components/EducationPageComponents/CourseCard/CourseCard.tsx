@@ -1,11 +1,11 @@
 import ProgressBar from "@/components/ProgressBar/ProgressBar"
 import { findBanner } from "@/utils/courseBannerMapper"
-import { courseCardType } from "@/utils/types/courseCardType"
+import { CourseCardType } from "@/utils/types/courseCardType"
 import { Image, Text, View } from "react-native"
 
 type Props = {
   cardIndex: number,
-  card: courseCardType,
+  card: CourseCardType,
 }
 
 const CourseCard = ({ cardIndex, card }: Props) => {

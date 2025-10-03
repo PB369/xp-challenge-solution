@@ -1,13 +1,13 @@
-import { User } from '@/utils/types/userType';
+import { UserType } from '@/utils/types/userType';
 import { saveUser } from '@/utils/userHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
 type UserContextType = {
-  user: User | null,
-  setUser: React.Dispatch<React.SetStateAction<User | null>>,
-  changeUserProperty: (property: keyof User, value: string | number | boolean) => void;
+  user: UserType | null,
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>,
+  changeUserProperty: (property: keyof UserType, value: string | number | boolean) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -15,7 +15,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 const USER_STORAGE_KEY = '@user_data';
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(()=>{
     const loadUser = async () => {
@@ -37,7 +37,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [user]);
 
-  const changeUserProperty = (property: keyof User, value: any) => {
+  const changeUserProperty = (property: keyof UserType, value: any) => {
     if(!user) return;
     setUser({...user, [property]: value});
   }

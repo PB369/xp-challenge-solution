@@ -1,4 +1,4 @@
-export type Asset = {
+export type AssetType = {
   name: string,
   class: string,
   profitability: string,

@@ -1,10 +1,10 @@
 import { darkGray, mainGray, mainWhite, mainYello } from "@/assets/colors/colors";
-import { Message } from "@/utils/types/messagesType";
+import { MessageType } from "@/utils/types/messagesType";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import LoadingMessage from "./LoadingMsg";
 
 type Props = {
-  messages: Array<Message>,
+  messages: Array<MessageType>,
 };
 
 export default function Chat({ messages }: Props) {

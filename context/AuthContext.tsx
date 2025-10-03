@@ -1,10 +1,10 @@
-import { User } from "@/utils/types/userType";
+import { UserType } from "@/utils/types/userType";
 import { getUser, removeUser, saveUser } from "@/utils/userHelper";
 import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useUser } from "./UserContex";
 
 type AuthContextType = {
-  user: User | null;
+  user: UserType | null;
   signUp: (username: string, email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => Promise<void>,
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (username: string, email: string, password: string) => {
-    const newUser: User = {
+    const newUser: UserType = {
       id: Date.now().toString(),
       username,
       email,
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUser = await getUser();
     
     if(storedUser && storedUser.email === email && storedUser.password === password) {
-      const loginUser: User = {
+      const loginUser: UserType = {
         ...storedUser,
         isAuthenticated: true,
       }
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     const storedUser = await getUser();
     if (storedUser) {
-      const updatedUser: User = {
+      const updatedUser: UserType = {
         ...storedUser,
         isAuthenticated: false,
       };

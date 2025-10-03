@@ -1,7 +1,7 @@
 import CourseCard from "@/components/EducationPageComponents/CourseCard/CourseCard";
 import CoursesFilters from "@/components/EducationPageComponents/CoursesFilters/CoursesFilters";
 import LastCourse from "@/components/EducationPageComponents/LastCourse/LastCourse";
-import { courseCardType } from "@/utils/types/courseCardType";
+import { CourseCardType } from "@/utils/types/courseCardType";
 import { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 
@@ -9,7 +9,7 @@ export default function Education(){
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
   const filtersList = ["Renda Variável", "Multimercado", "Renda Fixa", "ETFs", "Fundos Imobiliários"];
 
-  const courseCards: courseCardType[] = [
+  const courseCards: CourseCardType[] = [
     {
       courseName: "ETFs na prática",
       category: "ETFs",

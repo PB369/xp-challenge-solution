@@ -1,7 +1,7 @@
 import { useUser } from "@/context/UserContex";
 import '@/global.css';
 import { GEMINI_API_KEY } from "@/utils/geminiKey";
-import { Message } from "@/utils/types/messagesType";
+import { MessageType } from "@/utils/types/messagesType";
 import { PortfolioType } from "@/utils/types/portifolioType";
 import { GoogleGenAI } from "@google/genai";
 import { useRouter } from "expo-router";
@@ -25,7 +25,7 @@ export default function CreateFirstPortfolio() {
       try {
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-        const systemMessage: Message = {
+        const systemMessage: MessageType = {
           role: "model",
           content: `
           Você é um assistente financeiro integrado a um aplicativo de um projeto acadêmico.
@@ -130,7 +130,7 @@ export default function CreateFirstPortfolio() {
           `
         };
 
-        const userMessage: Message = {
+        const userMessage: MessageType = {
           role: "user",
           content: "Crie uma nova carteira de investimentos para mim"
         };

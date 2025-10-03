@@ -1,6 +1,6 @@
 import { PortfolioType } from "./portifolioType";
 
-export type User = {
+export type UserType = {
   id: string;
   username: string;
   password: string;

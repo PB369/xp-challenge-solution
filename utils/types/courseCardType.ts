@@ -1,4 +1,4 @@
-export type courseCardType = {
+export type CourseCardType = {
   courseName: string,
   category: string,
   duration: string,

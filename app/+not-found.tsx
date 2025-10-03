@@ -6,7 +6,6 @@ export default function NotFoundScreen() {
 
   return (
     <>
-      {/* <Stack.Screen options={{ title: "Oops! This screen doesn't exist." }} /> */}
       <View className='flex-1 justify-center items-center bg-black'>
         <Text className='text-white text-2xl font-semibold mb-4'>Esta página não existe.</Text>
         <Pressable 
