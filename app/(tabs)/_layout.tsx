@@ -11,7 +11,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function TabsLayout() {
   const { user } = useAuth();
   const pathname = usePathname();
-  const havePathCondition = pathname === "/" || pathname === "/portfolio";
+  const havePathCondition = pathname === "/" || pathname === "/portfolio" || pathname === "/education";
 
   if(!user){
     return <Redirect href='/signIn'/>
