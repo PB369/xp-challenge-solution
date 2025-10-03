@@ -28,7 +28,7 @@ const PortfolioInsights = () => {
     <View className="w-11/12 flex justify-center items-center my-3">
       <View className="flex flex-row w-full mb-2">
         <Octicons name="light-bulb" size={24} color="#facc15" />
-        <Text className="text-white font-semibold text-lg ml-3">Insights sobre carteira</Text>
+        <Text className="text-white font-semibold text-lg ml-3">Insights sobre sua carteira</Text>
       </View>
         {isPortfolioEmpty ? 
           <Text className='text-neutral-400 text-lg text-center font-bold mt-2'>Não há nenhum alerta sobre sua carteira no momento.</Text> 

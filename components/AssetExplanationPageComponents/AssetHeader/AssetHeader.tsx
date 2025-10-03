@@ -8,7 +8,7 @@ type Props = {
 
 const AssetHeader = ({asset}: Props) => {
   return (
-    <View>
+    <View className='w-11/12 justify-center items-center'>
       <View className="flex flex-row justify-start items-center mb-3">
         <Image source={require('@/assets/images/icons/barChartFilled-icon.png')} style={{width: 42, height: 42}}/>
         <View className="ml-3">
@@ -16,7 +16,7 @@ const AssetHeader = ({asset}: Props) => {
           <Text className="text-yellow-200 font-semibold">{asset.type}</Text>
         </View>
       </View>
-      <View className="flex flex-row justify-between items-center">
+      <View className="flex flex-row justify-between items-center w-full">
         <View>
           <Text className="text-white font-bold">{asset.percentageAllocation}%</Text>
           <Text className="text-neutral-400 font-bold">da carteira</Text>
