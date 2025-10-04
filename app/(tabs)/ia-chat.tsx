@@ -6,6 +6,7 @@ import { useUser } from '@/context/UserContex';
 import '@/global.css';
 import { GEMINI_API_KEY } from '@/utils/geminiKey';
 import { portifolioGenerationPrompt } from '@/utils/portifolioGenerationPrompt';
+import { EducationalCourseType } from '@/utils/types/educationalCourseType';
 import { MessageType } from '@/utils/types/messagesType';
 import { PortfolioType } from '@/utils/types/portifolioType';
 import { GoogleGenAI } from "@google/genai";
@@ -22,7 +23,7 @@ export default function IAChat() {
   const [isResponseLoading, setIsResponseLoading] = useState(false);
   const { user, changeUserProperty, setUser } = useUser();
 
-  const sugestionValues: string[] = ["Explique o que é um ativo financeiro", "Crie uma nova carteira de investimentos para mim", "Liste os ativos que estão rendendo mais", "Crie curso para iniciantes em Renda Fixa"];
+  const sugestionValues: string[] = ["Explique o que é um ativo financeiro", "Crie uma nova carteira de investimentos", "Liste os ativos que estão rendendo mais", "Crie um curso de iniciantes sobre Renda Fixa"];
 
   const verticalSugestions: string[] = ["Ativos com meu perfil", "Notícias recentes"];
 
@@ -37,6 +38,12 @@ export default function IAChat() {
     if(!user) return;
     const updatedPortfolios = [...(user.portfolios || []), portfolio];
     setUser({...user, portfolios: updatedPortfolios});
+  }
+
+  const addEducationalCourse = (educationalCourse: EducationalCourseType) => {
+    if(!user) return;
+    const updatedEducationalCourses = [...(user.educationalCourses || []), educationalCourse];
+    setUser({...user, educationalCourses: updatedEducationalCourses});
   }
 
   const send = async () => {
@@ -86,12 +93,19 @@ export default function IAChat() {
             content: "Sua carteira de investimento foi criada e está pronta para ser usada! Acesse a página Carteira para visualizá-la."
           };
 
+        } else if (parsed.action === "create_course") {
+          const educationalCourse: EducationalCourseType = parsed.educationalCourse;
+          addEducationalCourse(educationalCourse);
+
+          aiMessage = {
+            role: "model",
+            content: `Seu mais novo curso ${educationalCourse.courseName} foi criado e está pronto para ser estudado! Acesse a página Educação para acessá-lo.`
+          };
         } else if (parsed.action === "chat") {
           aiMessage = {
             role: "model",
             content: parsed.message
           };
-
         } else {
           aiMessage = {
             role: "model",

@@ -96,6 +96,55 @@ export const portifolioGenerationPrompt = (user: UserType | null) => (
       }
     }
 
+    Se o usuário pedir a criação de um curso, gere um em formato JSON de acordo com o seguinte exemplo abaixo. Considere que: description de educationalCourse deve ter no máximo até 10 palavras, progressPercentage deve ser sempre um valor numérico, nunca escreva-o junto com símbolo de porcentagem (%). Quando houver | em algum valor da propriedade no exemplo abaixo, é para você considerar que apenas devem ser escolhidos um dentre os valores especificados. O valor de duration deve ser sempre definido em minutos.
+    {
+      "action": "create_course",
+      "educationalCourse": {
+        "ownerId": ${user?.username},
+        "courseId": 1,
+        "courseName": "Introdução à Renda Fixa",
+        "category": "Renda Fixa",
+        "duration": "15 min",
+        "difficultyLevel": "Iniciante",
+        "progressPercentage": 33,
+        "description": "Invista com segurança: o guia definitivo para iniciantes em renda fixa.",
+        "isFinished": false,
+        whatWillLearn: ["Entender o que é Renda Fixa e como funciona", "Identificar os principais tipos de títulos", "Saber como escolher de acordo com seu perfil de investimentos", "Evitar eeros comuns de iniciantes"],
+        "modules": [
+          {
+            "moduleId": 1,
+            "moduleName": "Fundamentos da Renda Fixa",
+            "moduleDuration": "15 min",
+            "moduleProgressPercentage": 0,
+            "isFinished": false,
+            "lessons": [
+              {
+                "lessonId": 1,
+                "lessonName": "O que é Renda Fixa?",
+                "lessonDuration": "5 min",
+                "isFinished": false,
+                "content": "Renda Fixa é...",
+              },
+              {
+                "lessonId": 2,
+                "lessonName": "Conceitos Fundamentais",
+                "lessonDuration": "8 min",
+                "isFinished": false,
+                "content": "No mundo de investimentos a renda fixa...",
+              },
+              {
+                "lessonId": 3,
+                "lessonName": "Estratégias para Renda Fixa",
+                "lessonDuration": "2 min",
+                "isFinished": false,
+                "content": "Para fazer bons investimentos, precisamos considerar...",
+              },
+            ],
+          }
+        ],
+      }
+    }
+
     Se for apenas conversa normal:
     {
       "action": "chat",

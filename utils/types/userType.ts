@@ -1,3 +1,4 @@
+import { EducationalCourseType } from "./educationalCourseType";
 import { PortfolioType } from "./portifolioType";
 
 export type UserType = {
@@ -10,8 +11,8 @@ export type UserType = {
   experience?: string;
   goal?: string;
   timeOfInvestment?: string;
-  // initialAmount?: number;
   profileAssessment?: string;
   monthlyAmount?: string;
   portfolios?: PortfolioType[];
+  educationalCourses?: EducationalCourseType[];
 };

@@ -1,4 +1,5 @@
 type EducationalCourseLessonType = {
+  lessonId: number,
   lessonName: string,
   lessonDuration: string,
   isFinished: boolean,
@@ -6,7 +7,9 @@ type EducationalCourseLessonType = {
 }
 
 type EducationalCourseModuleType = {
-  moduleId: string,
+  moduleId: number,
+  moduleName: string,
+  moduleDescription: string,
   moduleDuration: string,
   moduleProgressPercentage: number,
   isFinished: boolean,
@@ -14,6 +17,8 @@ type EducationalCourseModuleType = {
 }
 
 export type EducationalCourseType = {
+  ownerId: string,
+  courseId: number,
   courseName: string,
   category: string,
   duration: string,
@@ -21,5 +26,6 @@ export type EducationalCourseType = {
   progressPercentage: number,
   description: string,
   isFinished: boolean,
+  whatWillLearn: string[],
   modules: EducationalCourseModuleType[] ,
 }
