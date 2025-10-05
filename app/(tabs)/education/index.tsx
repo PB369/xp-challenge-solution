@@ -47,12 +47,12 @@ export default function Education(){
     <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} className="flex-1 bg-black">
       <View className="flex-col w-11/12 h-full">
         <Text className="text-white text-2xl font-bold self-start mt-6">Meu Progresso</Text>
-        <LastCourse onPress={() => router.push(`/educationalCourse/0`)}/>
+        <LastCourse onPress={() => router.push(`/(tabs)/education/[id]/overview`)}/>
         <Text className="text-white text-2xl font-semibold self-start mt-3">Catálogo</Text>
         <CoursesFilters filtersList={filtersList} onFilterSelect={setSelectedFilter}/>
         <ScrollView>
           {filteredCourses.map((card, index) => (
-            <CourseCard key={index} card={card} cardIndex={index} onPress={() => router.push(`/educationalCourse/${card.courseId}`)}/>
+            <CourseCard key={index} card={card} cardIndex={index} onPress={() => router.push(`/education/[id]/overview`)}/>
           ))}
           {filteredCourses.length === 0 && (
             <Text className="text-white font-semibold text-lg text-center mt-4">

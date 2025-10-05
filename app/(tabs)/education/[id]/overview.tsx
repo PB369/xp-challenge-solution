@@ -1,6 +1,7 @@
 import { useUser } from "@/context/UserContex";
 import { findBanner } from "@/utils/courseBannerMapper";
 import { EducationalCourseType } from "@/utils/types/educationalCourseType";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
@@ -122,13 +123,21 @@ export default function EducationalCourse() {
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>
       <View className="flex-col justify-center items-center w-full">
         <Image source={findBanner(course.category)} style={{width: "100%", height: 200}}/>
+        <Pressable onPress={()=>router.back()} className="absolute top-2 right-2">
+          <Ionicons name="close-circle" size={40} color="white" />
+        </Pressable>
         <View className="flex-col justify-center items-start px-6 mt-6 w-full">
           <Text className="text-white text-2xl font-bold">{course.courseName}</Text>
           <Text className="text-neutral-400 mt-1 mb-4">{course.duration} - {course.difficultyLevel}</Text>
           <Text className="text-white text-lg text-justify">{course.description}</Text>
         </View>
       </View>
-      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={()=>router.push(`/(tabs)/education/[id]/content/index`)}>
+      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={()=>router.push({
+        pathname: "/(tabs)/education/[id]/content",
+        params: { 
+          id: course.courseId,
+        }
+      })}>
         <Text className="text-xl font-semibold text-center">Comece agora</Text>
       </Pressable>
       <View className="w-11/12 my-10">
