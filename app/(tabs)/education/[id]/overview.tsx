@@ -128,7 +128,7 @@ export default function EducationalCourse() {
           <Text className="text-white text-lg text-justify">{course.description}</Text>
         </View>
       </View>
-      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md">
+      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={()=>router.push(`/(tabs)/education/[id]/content/index`)}>
         <Text className="text-xl font-semibold text-center">Comece agora</Text>
       </Pressable>
       <View className="w-11/12 my-10">
