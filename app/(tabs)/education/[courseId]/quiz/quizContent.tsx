@@ -1,4 +1,5 @@
-import { useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
@@ -41,6 +42,8 @@ export default function QuizContent() {
     },
   ];
 
+  const { courseId } = useLocalSearchParams();
+
   const currentQuestion = questions[currentIndex];
 
   const handleNext = () => {
@@ -54,7 +57,6 @@ export default function QuizContent() {
       setCurrentIndex(currentIndex + 1);
       setSelectedOption(null);
     } else {
-      // calcular pontuação final
       const correctAnswers = updatedAnswers.filter(
         (a, i) => a === questions[i].correct
       ).length;
@@ -62,6 +64,7 @@ export default function QuizContent() {
       router.replace({
         pathname: "/(tabs)/education/[courseId]/quiz/quizResult",
         params: {
+          courseId: courseId.toString(),
           correctAnswers: correctAnswers.toString(),
           totalQuestions: questions.length.toString(),
         },
@@ -79,13 +82,18 @@ export default function QuizContent() {
   return (
     <View className="flex-1 bg-black justify-between items-center px-6 py-8">
       <View className="w-full">
-        <Text className="text-neutral-400 text-lg text-right mb-3">
-          Pergunta {currentIndex + 1}/{questions.length}
-        </Text>
+        <View className="flex-row justify-between items-center w-full mb-3">
+          <Text className="text-neutral-400 text-lg text-right">
+            Pergunta {currentIndex + 1}/{questions.length}
+          </Text>
+          <Pressable onPress={()=>router.push(`/(tabs)/education/${courseId}/content`)}>
+          <Ionicons name="close-circle" size={40} color="white" />
+        </Pressable>
+        </View>
+
         <Text className="text-white text-2xl font-bold mb-6">
           {currentQuestion.question}
         </Text>
-
         {currentQuestion.options.map((option, index) => (
           <Pressable
             key={index}

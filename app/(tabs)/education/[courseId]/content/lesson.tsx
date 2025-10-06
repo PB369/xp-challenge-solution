@@ -1,5 +1,6 @@
 import { useUser } from "@/context/UserContex";
 import { EducationalCourseType } from "@/utils/types/educationalCourseType";
+import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, View } from "react-native";
@@ -174,6 +175,9 @@ export default function CourseLesson() {
         }}
       >
         <View className="flex-col justify-center items-center w-11/12">
+          <Pressable onPress={() => router.replace(`/(tabs)/education/${courseId}/content`)} className="self-start w-1/4 py-2 ">
+            <Feather name="arrow-left" size={28} color="white" />
+          </Pressable>
           <Text className="text-white text-2xl font-bold mb-4 text-center">
             {currentModuleIndex + 1}. {module.moduleName}
           </Text>
