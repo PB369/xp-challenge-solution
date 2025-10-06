@@ -1,16 +1,20 @@
+import ProgressBar from "@/components/ProgressBar/ProgressBar";
 import { useUser } from "@/context/UserContex";
 import { findBanner } from "@/utils/courseBannerMapper";
 import { EducationalCourseType } from "@/utils/types/educationalCourseType";
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Entypo from '@expo/vector-icons/Entypo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
-export default function EducationalCourse() {
-  const { id } = useLocalSearchParams();
+export default function CourseContent() {
+  const {user} = useUser();
   const router = useRouter();
-  const {user} = useUser()
+  const [expandedIndex, setExpandedIndex] = useState<number | undefined>(undefined);
 
-  // const course: EducationalCourseType = JSON.parse(id as string);
   const course: EducationalCourseType = {
     ownerId: user!.username,
     courseId: 1,
@@ -35,7 +39,7 @@ export default function EducationalCourse() {
             lessonId: 1,
             lessonName: "O que é Renda Fixa?",
             lessonDuration: "5 min",
-            isFinished: false,
+            isFinished: true,
             content: "Renda Fixa é...",
           },
           {
@@ -121,83 +125,71 @@ export default function EducationalCourse() {
 
   return (
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>
-      <View className="flex-col justify-center items-center w-full">
-        <Image source={findBanner(course.category)} style={{width: "100%", height: 200}}/>
-        <Pressable onPress={()=>router.back()} className="absolute top-2 right-2">
-          <Ionicons name="close-circle" size={40} color="white" />
-        </Pressable>
-        <View className="flex-col justify-center items-start px-6 mt-6 w-full">
-          <Text className="text-white text-2xl font-bold">{course.courseName}</Text>
-          <Text className="text-neutral-400 mt-1 mb-4">{course.duration} - {course.difficultyLevel}</Text>
-          <Text className="text-white text-lg text-justify">{course.description}</Text>
-        </View>
-      </View>
-      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={()=>router.push({
-        pathname: "/(tabs)/education/[id]/content",
-        params: { 
-          id: course.courseId,
-        }
-      })}>
-        <Text className="text-xl font-semibold text-center">Comece agora</Text>
+      <Image 
+        source={findBanner(course.category)} 
+        style={{width: "100%", height: 200}}
+      />
+      <Pressable onPress={()=>router.push('/(tabs)/education')} className="absolute top-2 right-2">
+        <Ionicons name="close-circle" size={40} color="white" />
       </Pressable>
-      <View className="w-11/12 my-10">
-        <Text className="text-white font-bold text-2xl w-full mb-5">O que você aprenderá?</Text>
-        <View className="flex-col justify-center items-center border border-white w-full p-5 rounded-md">
-          {course.whatWillLearn.map((item, index)=>(
-            <View key={index} className="flex-row w-full justify-center items-center my-2">
-              <Image 
-                source={require('@/assets/images/icons/check-icon.png')}
-                style={{width: 20, height: 15}}
-              />
-              <Text className="text-white flex-1 text-justify ml-3 text-base">{item}</Text>
-            </View>
-          ))}
+      <View className="flex-col justify-center items-center w-11/12">
+        <Text className="text-white text-2xl font-bold w-full text-center my-4">{course.courseName}</Text>
+        <View className="justify-center items-center w-full my-4">
+          <ProgressBar bgOfBackBar="#3C3C3C" bgOfFrontBar="#ffffff" progressPercentage={33} borderRadius={6} height={3} widthInPercentage={90}/>
+          <Text className="text-white mt-3 font-semibold text-lg">{course.progressPercentage}% Concluído</Text>
         </View>
       </View>
-
-      <View className="flex-col justify-center items-center w-11/12 mb-20">
-        <Text className="text-white font-bold text-2xl self-start">Estrutura do Curso</Text>
-        <View className="bg-[#1E1E1E] p-6 mt-4 rounded-md relative">
-          
-          {course.modules.map((module, index) => (
-            <View key={index} className="flex-row items-start w-full relative my-3">
-              <View className="items-center">
-                <View 
-                  className={`border border-[#FFD700] w-12 h-12 justify-center items-center rounded-full ${index === 0 && "bg-[#FFD700]"}`}
-                >
-                  <Text 
-                    className={`font-bold text-2xl ${index === 0 ? "text-black" : "text-white"}`}
-                  >
-                    {index + 1}
-                  </Text>
+      <View className="w-11/12 mb-8">
+        <Text>Módulos</Text>
+        <View className="w-full">
+          {course.modules.map((module, moduleIndex)=>(
+            <Pressable 
+              key={moduleIndex} 
+              className="bg-neutral-800 w-full p-5 my-2 flex-col justify-between items-center rounded-md border border-white"
+              onPress={()=>setExpandedIndex(expandedIndex === moduleIndex ? undefined : moduleIndex)}
+            >
+              <View className="flex-row w-full">
+                <Text className="text-white font-semibold text-xl flex-1 text-ellipsis">{moduleIndex+1}. {module.moduleName}</Text>
+                <MaterialIcons name="expand-more" size={24} color="white"/>
+              </View>
+              {expandedIndex === moduleIndex && (
+                <View className="py-4 justify-center items-center w-full">
+                  {module.lessons.map((lesson, lessonIndex)=>(
+                    <Pressable 
+                    key={lessonIndex}
+                      className="flex-row w-full bg-neutral-700 p-4 my-1 justify-center items-center rounded-md"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/(tabs)/education/[courseId]/content/lesson",
+                          params: {
+                            courseId: course.courseId.toString(),
+                            moduleIndex: moduleIndex.toString(),
+                            lessonIndex: lessonIndex.toString(),
+                          },
+                        })}
+                    >
+                      <View className="flex-col flex-1 justify-center items-start">
+                        <Text className="text-white text-lg font-medium">{lesson.lessonName}</Text>
+                        <Text className="text-white text-lg font-normal">{lesson.lessonDuration}</Text>
+                      </View>
+                      <View>
+                      </View>
+                      {lesson.isFinished ? 
+                        <AntDesign name="checkcircle" size={24} color="#FFD700" />
+                        :
+                        <Entypo name="circle" size={24} color="#FFD700" />
+                      }
+                    </Pressable>
+                  ))}
                 </View>
-
-                <View
-                  className={`w-[2px] bg-white flex-1 my-5 mb-1 ${index === course.modules.length - 1 ? "opacity-100" : ""}`} style={{ height: 40 }}
-                />
-              </View>
-
-              <View className="flex-1 ml-5">
-                <Text className="text-white font-bold text-xl">{module.moduleName}</Text>
-                <Text className="text-white text-base">{module.moduleDescription}</Text>
-              </View>
-            </View>
+              )}
+            </Pressable>
           ))}
-
-          <View className="flex-row items-start w-full relative my-3">
-            <View className="items-center">
-              <View className="border border-[#FFD700] w-12 h-12 justify-center items-center rounded-full mt-1">
-                <Text className="font-bold text-2xl text-white">{course.modules.length + 1}</Text>
-              </View>
-            </View>
-            <View className="flex-1 ml-5">
-              <Text className="text-white font-bold text-xl">Quiz</Text>
-              <Text className="text-white text-base">Teste seu conhecimento e conclua esta jornada de aprendizado!</Text>
-            </View>
+          <View className="bg-[#FFD700] w-full p-5 my-2 flex-row justify-between items-center rounded-md">
+            <Text className="text-black text-center font-semibold text-xl flex-1 text-ellipsis">Realizar Quiz</Text>
           </View>
         </View>
       </View>
-
     </ScrollView>
-  );
+  )
 }
