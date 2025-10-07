@@ -1,7 +1,8 @@
 import { useUser } from "@/context/UserContex";
 import '@/global.css';
+import { contentGenerationPrompt } from "@/utils/contentGenerationPrompt";
 import { GEMINI_API_KEY } from "@/utils/geminiKey";
-import { portifolioGenerationPrompt } from "@/utils/portifolioGenerationPrompt";
+import { EducationalCourseType } from "@/utils/types/educationalCourseType";
 import { MessageType } from "@/utils/types/messagesType";
 import { PortfolioType } from "@/utils/types/portifolioType";
 import { GoogleGenAI } from "@google/genai";
@@ -13,7 +14,8 @@ export default function CreateFirstPortfolio() {
   const router = useRouter();
   const { user, setUser } = useUser();
   const [loading, setLoading] = useState(true);
-  const [created, setCreated] = useState(false);
+  const [isPortfolioCreated, setIsPortfolioCreated] = useState(false);
+  const [isCourseCreated, setIsCourseCreated] = useState(false);
 
   const addPortfolio = (portfolio: PortfolioType) => {
     if (!user) return;
@@ -21,19 +23,25 @@ export default function CreateFirstPortfolio() {
     setUser({ ...user, portfolios: updatedPortfolios });
   };
 
+  const addEducationalCourse = (educationalCourse: EducationalCourseType) => {
+    if(!user) return;
+    const updatedEducationalCourses = [...(user.educationalCourses || []), educationalCourse];
+    setUser({...user, educationalCourses: updatedEducationalCourses});
+  }
+
   useEffect(() => {
-    const createPortfolio = async () => {
+    const generateContent = async (userPrompt: string) => {
       try {
         const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
         const systemMessage: MessageType = {
           role: "model",
-          content: portifolioGenerationPrompt(user)
+          content: contentGenerationPrompt(user)
         };
 
         const userMessage: MessageType = {
           role: "user",
-          content: "Crie uma nova carteira de investimentos para mim"
+          content: userPrompt
         };
 
         const messages = [systemMessage, userMessage];
@@ -58,13 +66,18 @@ export default function CreateFirstPortfolio() {
           if (parsed.action === "create_portfolio") {
             const portfolio: PortfolioType = parsed.portfolio;
             addPortfolio(portfolio);
-            setCreated(true);
+            setIsPortfolioCreated(true);
+
+          } else if (parsed.action === "create_course") {
+            const educationalCourse: EducationalCourseType = parsed.educationalCourse;
+            addEducationalCourse(educationalCourse);
+            setIsCourseCreated(true);
 
             setTimeout(() => {
               router.replace("/(tabs)");
             }, 3000);
           } else {
-            console.warn("IA não retornou action create_portfolio:", parsed);
+            console.warn("IA não retornou action:", parsed);
           }
         } catch (err) {
           console.error("Falha ao parsear resposta da IA:", responseText);
@@ -77,12 +90,13 @@ export default function CreateFirstPortfolio() {
       }
     };
 
-    createPortfolio();
+    generateContent("Crie uma carteira de investimentos para mim.");
+    generateContent("Crie um curso para iniciantes em investimentos.");
   }, []);
 
   return (
     <View className="flex-1 justify-center items-center bg-black px-8">
-      {loading && !created && (
+      {loading && !isPortfolioCreated && (
         <>
           <ActivityIndicator size="large" color="#FFD700" />
           <Text className="text-white mt-4 text-lg text-center">
@@ -91,13 +105,13 @@ export default function CreateFirstPortfolio() {
         </>
       )}
 
-      {!loading && created && (
+      {!loading && isPortfolioCreated && isCourseCreated && (
         <Text className="text-white font-semibold text-2xl text-center">
-          Sua carteira foi criada! Aproveite esta nova jornada.
+          Sua carteira foi criada! Também estamos te presenteando com um curso bônus. Aproveite esta nova jornada!
         </Text>
       )}
       
-      {!loading && !created && (
+      {!loading && !isPortfolioCreated && (
         <View className="flex-col justify-center items-center w-full">
           <Text className="text-white font-semibold text-2xl text-center bg-red-700 p-4 rounded-md">
             Ops! Ocorreu um erro na criação de sua carteira.

@@ -16,6 +16,13 @@ type EducationalCourseModuleType = {
   lessons: EducationalCourseLessonType[],
 }
 
+type EducationalCourseQuizType = {
+  quizId: number,
+  question: string,
+  options: string[],
+  correct: number,
+}
+
 export type EducationalCourseType = {
   ownerId: string,
   courseId: number,
@@ -26,6 +33,9 @@ export type EducationalCourseType = {
   progressPercentage: number,
   description: string,
   isFinished: boolean,
+  isLastAccessed: boolean,
+  hasBeenStarted: boolean,
   whatWillLearn: string[],
-  modules: EducationalCourseModuleType[] ,
+  modules: EducationalCourseModuleType[],
+  quiz: EducationalCourseQuizType[],
 }
