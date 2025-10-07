@@ -90,8 +90,11 @@ export default function CreateFirstPortfolio() {
       }
     };
 
-    generateContent("Crie uma carteira de investimentos para mim.");
-    generateContent("Crie um curso para iniciantes em investimentos.");
+    const run = async () => {
+      await generateContent("Crie uma carteira de investimentos para mim.");
+      await generateContent("Crie um curso para iniciantes em investimentos.");
+    };
+    run();
   }, []);
 
   return (

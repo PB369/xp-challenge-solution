@@ -12,7 +12,7 @@ export default function Education(){
   
   const { user } = useUser();
   const coursesList = user?.educationalCourses || [];
-  // const course = coursesList[0];
+
   const isCourseListEmpty = coursesList.length === 0;
   
   const router = useRouter();
@@ -43,23 +43,38 @@ export default function Education(){
   const courseContentPath = `/(tabs)/education/[courseId]/content`
 
   return (
-    <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}} className="flex-1 bg-black">
-      <View className="flex-col w-11/12 h-full">
-        <Text className="text-white text-2xl font-bold self-start mt-6">Meu Progresso</Text>
-        <LastCourse lastCourseCard={lastCourseCard} onPress={() => router.push(lastCourseCard.hasBeenStarted ? courseContentPath : courseOverviewPath)}/>
-        <Text className="text-white text-2xl font-semibold self-start mt-3">Catálogo</Text>
-        <CoursesFilters filtersList={filtersList} onFilterSelect={setSelectedFilter}/>
-        <ScrollView>
-          {filteredCourses.map((card, index) => (
-            <CourseCard key={index} card={card} cardIndex={index} onPress={() => router.push(lastCourseCard.hasBeenStarted ? courseContentPath : courseOverviewPath)}/>
-          ))}
-          {filteredCourses.length === 0 && (
-            <Text className="text-white font-semibold text-lg text-center mt-4">
-              Nenhum curso encontrado para este catálogo.
-            </Text>
-          )}
-        </ScrollView>
-      </View>
+    <ScrollView contentContainerStyle={{justifyContent: 'center', alignItems: 'center', flexGrow: 1}} className="flex-1 bg-black">
+      {isCourseListEmpty ? (
+        <View className="flex-col justify-center items-center w-11/12 flex-1">
+          <Text className="text-white opacity-70 text-center font-bold text-xl">Nenhum curso criado.</Text>
+          <Text className="text-white opacity-70 text-center font-bold text-xl">Peça ao seu assistente de IA para gerar um e comece a aprender!</Text>
+        </View>
+      ) : (
+        <View className="flex-col w-11/12 h-full">
+          <Text className="text-white text-2xl font-bold self-start mt-6">Meu Progresso</Text>
+          <LastCourse lastCourseCard={lastCourseCard} onPress={() => router.push({
+              pathname: lastCourseCard.hasBeenStarted ? courseContentPath : courseOverviewPath,
+              params: { courseId: lastCourseCard.courseId.toString() }
+            })}
+          />
+          <Text className="text-white text-2xl font-semibold self-start mt-3">Catálogo</Text>
+          <CoursesFilters filtersList={filtersList} onFilterSelect={setSelectedFilter}/>
+          <ScrollView>
+            {filteredCourses.map((card, index) => (
+              <CourseCard key={index} card={card} cardIndex={index} onPress={() => router.push({
+                  pathname: lastCourseCard.hasBeenStarted ? courseContentPath : courseOverviewPath,
+                  params: { courseId: card.courseId.toString() }
+                })}
+              />
+            ))}
+            {filteredCourses.length === 0 && (
+              <Text className="text-white font-semibold text-lg text-center mt-4">
+                Nenhum curso encontrado para este catálogo.
+              </Text>
+            )}
+          </ScrollView>
+        </View>
+      )}
     </ScrollView>
   )
 }
