@@ -4,7 +4,7 @@ import ChatTextField from '@/components/ChatPageComponents/ChatTextField';
 import TextButton from '@/components/ChatPageComponents/TextButton';
 import { useUser } from '@/context/UserContex';
 import '@/global.css';
-import { portifolioGenerationPrompt } from '@/utils/contentGenerationPrompt';
+import { contentGenerationPrompt } from '@/utils/contentGenerationPrompt';
 import { GEMINI_API_KEY } from '@/utils/geminiKey';
 import { EducationalCourseType } from '@/utils/types/educationalCourseType';
 import { MessageType } from '@/utils/types/messagesType';
@@ -29,7 +29,7 @@ export default function IAChat() {
 
   const [messages, setMessages] = useState<MessageType[]>([{
     role: "model",
-    content: portifolioGenerationPrompt(user),
+    content: contentGenerationPrompt(user),
   }]);
 
   const [chat, setChat] = useState<MessageType[]>([]);
