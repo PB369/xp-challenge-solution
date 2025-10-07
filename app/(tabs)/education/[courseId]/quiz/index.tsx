@@ -1,8 +1,9 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function InitialScreenOfQuiz() {
   const router = useRouter();
+  const { courseId } = useLocalSearchParams();
 
   return (
     <View className="flex-1 justify-between items-center bg-black w-full py-10">
@@ -19,12 +20,14 @@ export default function InitialScreenOfQuiz() {
         />
       </View>
 
-      {/* BOTÕES FIXADOS NO FINAL */}
       <View className="w-full items-center mb-10">
         <Pressable
           className="bg-yellow-400 my-2 py-4 w-[75%] rounded-md"
           onPress={() =>
-            router.replace("/(tabs)/education/[courseId]/quiz/quizContent")
+            router.replace({
+              pathname: "/(tabs)/education/[courseId]/quiz/quizContent",
+              params: { courseId: courseId.toString() }
+            })
           }
         >
           <Text className="text-center text-lg font-semibold">Iniciar</Text>

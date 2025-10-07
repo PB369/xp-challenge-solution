@@ -1,48 +1,27 @@
+import { useUser } from "@/context/UserContex";
+import { EducationalCourseQuizType } from "@/utils/types/educationalCourseType";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-
-type Question = {
-  id: number;
-  question: string;
-  options: string[];
-  correct: number;
-};
 
 export default function QuizContent() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const router = useRouter();
-
-  const questions: Question[] = [
-    {
-      id: 1,
-      question: "O que é o React Native?",
-      options: [
-        "Uma linguagem de programação",
-        "Um framework para apps móveis",
-        "Um sistema operacional",
-        "Um banco de dados",
-      ],
-      correct: 1,
-    },
-    {
-      id: 2,
-      question: "Qual linguagem principal o React Native utiliza?",
-      options: ["Kotlin", "JavaScript", "Swift", "Dart"],
-      correct: 1,
-    },
-    {
-      id: 3,
-      question: "Quem mantém o React Native?",
-      options: ["Google", "Meta (Facebook)", "Microsoft", "Amazon"],
-      correct: 1,
-    },
-  ];
-
+  const { user } = useUser();
   const { courseId } = useLocalSearchParams();
+
+  const course = user!.educationalCourses?.find(
+    (c) => c.courseId === Number(courseId)
+  );
+
+  const quiz = course?.quiz || [];
+
+  const questions: EducationalCourseQuizType[] = quiz.map((question) => ({
+    ...question,
+  }));
 
   const currentQuestion = questions[currentIndex];
 
@@ -55,7 +34,7 @@ export default function QuizContent() {
 
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
-      setSelectedOption(null);
+      setSelectedOption(answers[currentIndex + 1] ?? null);
     } else {
       const correctAnswers = updatedAnswers.filter(
         (a, i) => a === questions[i].correct
@@ -67,6 +46,8 @@ export default function QuizContent() {
           courseId: courseId.toString(),
           correctAnswers: correctAnswers.toString(),
           totalQuestions: questions.length.toString(),
+          answers: JSON.stringify(updatedAnswers),
+          questions: JSON.stringify(questions),
         },
       });
     }
@@ -86,14 +67,15 @@ export default function QuizContent() {
           <Text className="text-neutral-400 text-lg text-right">
             Pergunta {currentIndex + 1}/{questions.length}
           </Text>
-          <Pressable onPress={()=>router.push(`/(tabs)/education/${courseId}/content`)}>
-          <Ionicons name="close-circle" size={40} color="white" />
-        </Pressable>
+          <Pressable onPress={() => router.push(`/(tabs)/education/${courseId}/content`)}>
+            <Ionicons name="close-circle" size={40} color="white" />
+          </Pressable>
         </View>
 
         <Text className="text-white text-2xl font-bold mb-6">
           {currentQuestion.question}
         </Text>
+
         {currentQuestion.options.map((option, index) => (
           <Pressable
             key={index}

@@ -6,6 +6,7 @@ const USER_KEY = "@user_data";
 export const saveUser = async (user: UserType): Promise<void> => {
   try {
     await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+    console.log("User salvo:", user);
   } catch (error) {
     console.error("Erro ao salvar usuário:", error);
   }

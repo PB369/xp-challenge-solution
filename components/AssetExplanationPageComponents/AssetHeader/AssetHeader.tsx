@@ -9,9 +9,9 @@ type Props = {
 const AssetHeader = ({asset}: Props) => {
   return (
     <View className='w-11/12 justify-center items-center'>
-      <View className="flex flex-row justify-start items-center mb-3">
+      <View className="flex-row justify-start items-center mb-3">
         <Image source={require('@/assets/images/icons/barChartFilled-icon.png')} style={{width: 42, height: 42}}/>
-        <View className="ml-3">
+        <View className="ml-3 flex-1">
           <Text className="text-white text-3xl font-semibold">{asset.assetName}</Text>
           <Text className="text-yellow-200 font-semibold">{asset.type}</Text>
         </View>

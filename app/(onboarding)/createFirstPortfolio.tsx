@@ -18,15 +18,26 @@ export default function CreateFirstPortfolio() {
   const [isCourseCreated, setIsCourseCreated] = useState(false);
 
   const addPortfolio = (portfolio: PortfolioType) => {
-    if (!user) return;
-    const updatedPortfolios = [...(user.portfolios || []), portfolio];
-    setUser({ ...user, portfolios: updatedPortfolios });
+    if (!user) {
+      console.log(`Erro addPortfolio: User é ${typeof(user)}`)
+      return
+    };
+    setUser(prev => ({
+      ...prev!,
+      portfolios: [...(prev!.portfolios || []), portfolio]
+    }));
   };
 
   const addEducationalCourse = (educationalCourse: EducationalCourseType) => {
-    if(!user) return;
-    const updatedEducationalCourses = [...(user.educationalCourses || []), educationalCourse];
-    setUser({...user, educationalCourses: updatedEducationalCourses});
+    if (!user) {
+      console.log(`Erro addEducationalCourse: User é ${typeof(user)}`)
+      return
+    };
+
+    setUser(prev => ({
+      ...prev!,
+      educationalCourses: [...(prev!.educationalCourses || []), educationalCourse]
+    }));
   }
 
   useEffect(() => {
@@ -47,7 +58,7 @@ export default function CreateFirstPortfolio() {
         const messages = [systemMessage, userMessage];
 
         const aiResponse = await ai.models.generateContent({
-          model: "gemini-2.5-flash",
+          model: "gemini-2.0-flash-lite",
           contents: messages.map(m => ({
             role: m.role,
             parts: [{ text: m.content }],
@@ -67,11 +78,14 @@ export default function CreateFirstPortfolio() {
             const portfolio: PortfolioType = parsed.portfolio;
             addPortfolio(portfolio);
             setIsPortfolioCreated(true);
-
+            console.log("Processo create_portfolio finalizado.")
+            console.log("Retorno de parsed.portfolio:", portfolio)
           } else if (parsed.action === "create_course") {
             const educationalCourse: EducationalCourseType = parsed.educationalCourse;
             addEducationalCourse(educationalCourse);
             setIsCourseCreated(true);
+            console.log("Processo create_course finalizado.")
+            console.log("Retorno de parsed.educationalCourse:", educationalCourse)
 
             setTimeout(() => {
               router.replace("/(tabs)");
@@ -85,21 +99,20 @@ export default function CreateFirstPortfolio() {
 
       } catch (error) {
         console.error("Erro ao criar carteira:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     const run = async () => {
       await generateContent("Crie uma carteira de investimentos para mim.");
       await generateContent("Crie um curso para iniciantes em investimentos.");
+      setLoading(false);
     };
     run();
   }, []);
 
   return (
     <View className="flex-1 justify-center items-center bg-black px-8">
-      {loading && !isPortfolioCreated && (
+      {loading && (
         <>
           <ActivityIndicator size="large" color="#FFD700" />
           <Text className="text-white mt-4 text-lg text-center">

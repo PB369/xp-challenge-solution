@@ -16,11 +16,12 @@ type EducationalCourseModuleType = {
   lessons: EducationalCourseLessonType[],
 }
 
-type EducationalCourseQuizType = {
+export type EducationalCourseQuizType = {
   quizId: number,
   question: string,
   options: string[],
   correct: number,
+  topic: string,
 }
 
 export type EducationalCourseType = {

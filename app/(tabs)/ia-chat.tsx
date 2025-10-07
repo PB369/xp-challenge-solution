@@ -68,7 +68,7 @@ export default function IAChat() {
       ]);
 
       const aiResponse = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-2.0-flash-lite",
         contents: updatedMessages.map(m => ({
           role: m.role,
           parts: [{ text: m.content }],

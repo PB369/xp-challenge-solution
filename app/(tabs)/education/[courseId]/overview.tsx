@@ -7,12 +7,13 @@ import { Image, Pressable, ScrollView, Text, View } from "react-native";
 export default function EducationalCourse() {
   const { courseId } = useLocalSearchParams();
   const router = useRouter();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
 
   const course = user!.educationalCourses?.find(
     (c) => c.courseId === Number(courseId)
   );
 
+  
   if(!course){return (
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>
       <View className="flex-col justify-center items-center w-11/12 flex-1">
@@ -20,6 +21,27 @@ export default function EducationalCourse() {
       </View>
     </ScrollView>
   )}
+
+  const handleStartCourse = () => {
+    if (!user) return;
+
+    const updatedCourses = user.educationalCourses?.map(c => {
+      if (c.courseId === course.courseId) {
+        return { ...c, hasBeenStarted: true };
+      }
+      return c;
+    }) || [];
+
+    setUser({ ...user, educationalCourses: updatedCourses });
+
+    router.push({
+      pathname: "/(tabs)/education/[courseId]/content",
+      params: { 
+        courseId: course.courseId,
+      }
+    });
+  };
+
   
   return (
     <ScrollView className="flex-1 bg-black w-full py-6" contentContainerStyle={{justifyContent:'center', alignItems:'center'}}>
@@ -34,12 +56,7 @@ export default function EducationalCourse() {
           <Text className="text-white text-lg text-justify">{course.description}</Text>
         </View>
       </View>
-      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={()=>router.push({
-        pathname: "/(tabs)/education/[courseId]/content",
-        params: { 
-          courseId: course.courseId,
-        }
-      })}>
+      <Pressable className="bg-[#FFD700] w-11/12 mt-5 py-2 rounded-md" onPress={handleStartCourse}>
         <Text className="text-xl font-semibold text-center">Comece agora</Text>
       </Pressable>
       <View className="w-11/12 my-10">

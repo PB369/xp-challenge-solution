@@ -1,10 +1,11 @@
 import { darkGray, mainGray, mainWhite, mainYello } from "@/assets/colors/colors";
 import { MessageType } from "@/utils/types/messagesType";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { FadeInTypeMsg } from "./FadeInTypeMsg";
 import LoadingMessage from "./LoadingMsg";
 
 type Props = {
-  messages: Array<MessageType>,
+  messages: Array<MessageType>;
 };
 
 export default function Chat({ messages }: Props) {
@@ -14,26 +15,51 @@ export default function Chat({ messages }: Props) {
       contentContainerStyle={styles.contentContainer}
       keyboardShouldPersistTaps="handled"
     >
-      {messages.map((message, index) => (
-        <View
-          key={index}
-          style={message.role === "user" ? styles.messageUserRow : styles.messageAIRow}
-        >
-          <View style={message.role === "user" ? styles.messageUser : message.content === "<loading>" ? styles.messageAILoading :  styles.messageAI}>
-            {message.content === "<loading>" && message.role === "model" ? (
-              <LoadingMessage />
-            ) : (
-              <Text style={message.role === "user" ? styles.messageUserText : styles.messageAIText}>
-                {message.content}
-              </Text>
-            )}
+      {messages.map((message, index) => {
+        // Mensagem da IA com animação
+        if (message.role === "model" && message.content !== "<loading>") {
+          return <FadeInTypeMsg key={index} content={message.content} />;
+        }
+
+        // Mensagens do usuário ou loading continuam iguais
+        return (
+          <View
+            key={index}
+            style={message.role === "user" ? styles.messageUserRow : styles.messageAIRow}
+          >
+            <View
+              style={
+                message.role === "user"
+                  ? styles.messageUser
+                  : message.content === "<loading>"
+                  ? styles.messageAILoading
+                  : styles.messageAI
+              }
+            >
+              {message.content === "<loading>" && message.role === "model" ? (
+                <LoadingMessage />
+              ) : (
+                <Text
+                  style={
+                    message.role === "user"
+                      ? styles.messageUserText
+                      : styles.messageAIText
+                  }
+                >
+                  {message.content}
+                </Text>
+              )}
+            </View>
           </View>
-        </View>
-      ))}
+        );
+      })}
     </ScrollView>
   );
 }
 
+// -------------------
+// Styles
+// -------------------
 const styles = StyleSheet.create({
   chat: {
     flex: 1,
