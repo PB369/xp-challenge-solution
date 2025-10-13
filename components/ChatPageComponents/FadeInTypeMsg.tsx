@@ -11,6 +11,7 @@ export function FadeInTypeMsg({ content }: FadeInTypewriterMessageProps) {
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
+    setDisplayedText("");
     Animated.timing(opacity, {
       toValue: 1,
       duration: 300,

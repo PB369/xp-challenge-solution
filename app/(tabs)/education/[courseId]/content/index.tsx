@@ -89,7 +89,6 @@ export default function CourseContent() {
             </Pressable>
           ))}
 
-          {/* Botão de Quiz */}
           <Pressable 
             className={`w-full p-5 my-2 flex-row justify-center items-center rounded-md ${isQuizUnlocked ? "bg-[#FFD700]" : "bg-[#7a6c19]"}`}
             onPress={() => isQuizUnlocked && router.push({
