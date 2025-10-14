@@ -4,7 +4,7 @@ import { PortfolioType } from "./portifolioType";
 export type UserType = {
   id: string;
   username: string;
-  password: string;
+  password?: string;
   email: string;
   isFirstAccess: boolean;
   isAuthenticated: boolean;

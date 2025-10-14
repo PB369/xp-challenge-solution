@@ -1,12 +1,14 @@
+import { auth } from '@/config/firebase';
 import { UserType } from '@/utils/types/userType';
-import { saveUser } from '@/utils/userHelper';
+import { getUser, saveUser } from '@/utils/userHelper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { User as FirebaseUser, onAuthStateChanged } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
 type UserContextType = {
-  user: UserType | null,
-  setUser: React.Dispatch<React.SetStateAction<UserType | null>>,
+  user: UserType | null;
+  setUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   changeUserProperty: (property: keyof UserType, value: string | number | boolean) => void;
 };
 
@@ -17,30 +19,44 @@ const USER_STORAGE_KEY = '@user_data';
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
 
-  useEffect(()=>{
-    const loadUser = async () => {
-      try {
-        const storedUser = await AsyncStorage.getItem(USER_STORAGE_KEY);
-        if(storedUser){
-          setUser(JSON.parse(storedUser));
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        try {
+          const existingUser = await getUser(firebaseUser.uid);
+          if (existingUser) {
+            setUser(existingUser);
+          } else {
+            const newUser: UserType = {
+              id: firebaseUser.uid,
+              username: firebaseUser.displayName || '',
+              email: firebaseUser.email || '',
+              isAuthenticated: true,
+              isFirstAccess: true,
+            };
+            await saveUser(newUser);
+            setUser(newUser);
+          }
+        } catch (error) {
+          Alert.alert('Erro', `Falha ao carregar usuário: ${error}`);
         }
-      } catch (error) {
-        Alert.alert('Error', `An Error occurred while trying to load the user from AsyncStorage. ${error}`);
+      } else {
+        await AsyncStorage.removeItem(USER_STORAGE_KEY);
+        setUser(null);
       }
-    }
-    loadUser();
+    });
+
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (user) {
-      saveUser(user);
-    }
+    if (user) saveUser(user);
   }, [user]);
 
   const changeUserProperty = (property: keyof UserType, value: any) => {
-    if(!user) return;
-    setUser({...user, [property]: value});
-  }
+    if (!user) return;
+    setUser({ ...user, [property]: value });
+  };
 
   return (
     <UserContext.Provider value={{ user, setUser, changeUserProperty }}>
