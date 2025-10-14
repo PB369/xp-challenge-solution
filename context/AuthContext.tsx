@@ -1,7 +1,8 @@
-import { auth } from "@/config/firebase";
+import { auth, db } from "@/config/firebase";
 import { UserType } from "@/utils/types/userType";
 import { getUser, removeUser, saveUser } from "@/utils/userHelper";
 import { createUserWithEmailAndPassword, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
@@ -45,16 +46,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (username: string, email: string, password: string) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const newUser: UserType = {
-      id: cred.user.uid,
-      username,
-      email,
-      isAuthenticated: true,
-      isFirstAccess: true,
-    };
-    await saveUser(newUser);
-    setUser(newUser);
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+
+      const newUser = {
+        id: cred.user.uid,
+        username,
+        email,
+        isAuthenticated: true,
+        isFirstAccess: true,
+      };
+      
+      await setDoc(doc(db, "users", cred.user.uid), newUser);
+      setUser(newUser);
+    } catch (error: any) {
+      console.error("Erro no signUp:", error.code, error.message);
+      throw error;
+    }
   };
 
   const signIn = async (email: string, password: string): Promise<boolean> => {
