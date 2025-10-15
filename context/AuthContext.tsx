@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signUp = async (username: string, email: string, password: string) => {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
-
       const newUser = {
         id: cred.user.uid,
         username,
@@ -58,6 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       };
       
       await setDoc(doc(db, "users", cred.user.uid), newUser);
+      await saveUser(newUser);
       setUser(newUser);
     } catch (error: any) {
       console.error("Erro no signUp:", error.code, error.message);

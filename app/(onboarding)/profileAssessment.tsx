@@ -28,7 +28,7 @@ export default function ProfileAssessment() {
 
   const handleFinish = () => {
     changeUserProperty('isFirstAccess', false);
-    router.replace('/(onboarding)/createFirstPortfolio');
+    router.replace('/(tabs)');
   }
   
   const handlePrev = () => {

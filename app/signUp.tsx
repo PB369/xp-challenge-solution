@@ -12,6 +12,7 @@ export default function SignUp() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -23,12 +24,20 @@ export default function SignUp() {
       setErrorMessage('Preencha todos os campos para criar sua conta!');
       setShowErrorMessage(true);
     } else {
-      if(password === confirmPassword) {
-        signUp(username, email, password);
-        router.replace('/signIn');
-      } else {
-        setErrorMessage('Os campos de senha não são iguais');
+      if(password.length < 6){
+        setErrorMessage('A senha deve ter ao menos 6 caracteres.');
         setShowErrorMessage(true);
+      } else if(!emailRegex.test(email)){
+        setErrorMessage('Formato de email inválido');
+        setShowErrorMessage(true);
+      } else {
+        if(password === confirmPassword) {
+          signUp(username, email, password);
+          router.replace('/signIn');
+        } else {
+          setErrorMessage('Os campos de senha não são iguais');
+          setShowErrorMessage(true);
+        }
       }
     }
   }
