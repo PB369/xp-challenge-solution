@@ -2,7 +2,7 @@ import { auth, db } from "@/config/firebase";
 import { UserType } from "@/utils/types/userType";
 import { getUser, removeUser, saveUser } from "@/utils/userHelper";
 import { createUserWithEmailAndPassword, deleteUser, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signUp = async (username: string, email: string, password: string) => {
     try {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
+
       const newUser = {
         id: cred.user.uid,
         username,
@@ -75,6 +76,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(loggedUser);
         return true;
       }
+      console.log("existingUser: ", existingUser)
       return false;
     } catch (error) {
       console.error("Erro ao logar:", error);
@@ -83,14 +85,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOutUser = async () => {
-    if (user) await removeUser(user.id);
+    if (user) await removeUser();
     await signOut(auth);
     setUser(null);
   };
 
   const deleteAccount = async () => {
     if (auth.currentUser) {
-      await removeUser(auth.currentUser.uid);
+      await deleteDoc(doc(db, "users", auth.currentUser.uid));
       await deleteUser(auth.currentUser);
       setUser(null);
     }

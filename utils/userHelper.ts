@@ -1,6 +1,6 @@
 import { db } from "@/config/firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserType } from "./types/userType";
 
 const USER_KEY = "@user_data";
@@ -30,10 +30,9 @@ export const getUser = async (userId?: string): Promise<UserType | null> => {
   }
 };
 
-export const removeUser = async (userId: string): Promise<void> => {
+export const removeUser = async (): Promise<void> => {
   try {
     await AsyncStorage.removeItem(USER_KEY);
-    await deleteDoc(doc(db, "users", userId));
   } catch (error) {
     console.error("Erro ao remover usuário:", error);
   }

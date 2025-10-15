@@ -2,7 +2,7 @@ import { useAuth } from "@/context/AuthContext";
 import '@/global.css';
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Image, Pressable, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, TextInput, View } from "react-native";
 
 export default function SignUp() {
   const { signUp } = useAuth();
@@ -16,9 +16,11 @@ export default function SignUp() {
 
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isLoadingSignUp, setIsLoadingSignUp] = useState<boolean>(false);
 
   const handleRegister = () => {
     setShowErrorMessage(false);
+    setIsLoadingSignUp(true);
 
     if(username.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0){
       setErrorMessage('Preencha todos os campos para criar sua conta!');
@@ -40,6 +42,7 @@ export default function SignUp() {
         }
       }
     }
+    setIsLoadingSignUp(false);
   }
 
   return (
@@ -62,7 +65,11 @@ export default function SignUp() {
           className="py-2 px-2 mb-8 bg-zinc-800 text-white text-base  rounded-md w-full placeholder:text-white"
         />
         <Pressable onPress={handleRegister} className="bg-yellow-400 py-2 mb-4 w-full rounded-md">
-          <Text className="text-center text-base font-semibold">Criar minha conta</Text>
+          {isLoadingSignUp ? 
+            <ActivityIndicator size={21} color="#000000" /> 
+            : 
+            <Text className="text-center text-base font-semibold">Criar minha conta</Text>
+          }
         </Pressable>
         <Pressable onPress={()=>router.replace('/signIn')} className="bg-transparent py-2 mb-4 w-full rounded-md">
           <Text className="text-center text-base font-semibold text-white underline">Já tenho uma conta</Text>
