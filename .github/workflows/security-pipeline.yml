@@ -1,0 +1,81 @@
+name: security-pipeline
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Se seu projeto tiver testes/lint, plugue aqui:
+      - name: Detect package manager
+        id: pm
+        run: |
+          if [ -f package-lock.json ]; then echo "pm=npm" >> $GITHUB_OUTPUT; fi
+          if [ -f pnpm-lock.yaml ]; then echo "pm=pnpm" >> $GITHUB_OUTPUT; fi
+          if [ -f yarn.lock ]; then echo "pm=yarn" >> $GITHUB_OUTPUT; fi
+      - name: Node Install & Test (opcional)
+        if: steps.pm.outputs.pm != ''
+        run: |
+          if [ "${{steps.pm.outputs.pm}}" = "npm" ]; then npm ci && npm test || true; fi
+          if [ "${{steps.pm.outputs.pm}}" = "pnpm" ]; then corepack enable && pnpm i && pnpm test || true; fi
+          if [ "${{steps.pm.outputs.pm}}" = "yarn" ]; then corepack enable && yarn && yarn test || true; fi
+
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/owasp-top-ten"
+          generateSarif: "1"
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: semgrep.sarif
+
+  sca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          format: 'table'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gitleaks/gitleaks-action@v2
+        with:
+          args: "--no-banner --redact --verbose"
+
+  dast:
+    runs-on: ubuntu-latest
+    needs: [build-test]
+    steps:
+      - uses: actions/checkout@v4
+
+      # Se o repo já tiver Dockerfile que sobe o app na 8080, ótimo; senão veja a opção B abaixo
+      - name: Build & run app (Docker)
+        run: |
+          docker build -t app .
+          docker run -d -p 8080:8080 --name app app || true
+          sleep 8
+
+      - name: ZAP Baseline
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: 'http://localhost:8080'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -J zap.json'
+
+      - name: Fail on Medium+
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          jq '.site[].alerts[] | select(.riskcode|tonumber>=2)' zap.json | grep . && exit 1 || exit 0
