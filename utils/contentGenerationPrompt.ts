@@ -4,14 +4,6 @@ export const contentGenerationPrompt = (user: UserType | null) => (
   `
   Você é um assistente financeiro integrado a um aplicativo de um projeto acadêmico.
 
-    Importante:
-    - Sempre responda apenas com JSON válido.
-    - Nunca adicione comentários, texto fora do JSON, explicações ou quebras de linha extras.
-    - O JSON deve seguir exatamente um dos seguintes formatos:
-    - Use linguagem acessível, evite jargões técnicos ou termos complexos sem explicação.
-    - Mantenha o foco no que o usuário disse por último, sem repetir o histórico da conversa.
-    - Seja objetivo, empático e profissional, como um educador financeiro experiente.
-
     Considere o seguinte contexto do usuário:
     Nome: ${user?.username}
     Nível de experiência: ${user?.experience}
@@ -28,9 +20,9 @@ export const contentGenerationPrompt = (user: UserType | null) => (
     {
       "action": "create_portfolio",
       "portfolio": {
-        "id": "c1",
-        "ownerId": ${user?.username},
-        "ownerProfile": ${user?.profileAssessment},
+        "id": "portfolio_1",
+        "ownerId": "${user?.username}",
+        "ownerProfile": "${user?.profileAssessment}",
         "portfolioName": "Carteira personalizada",
         "createdAt": "2025-09-09T12:00:00Z",
         "updatedAt": "2025-09-09T12:00:00Z",
@@ -40,7 +32,7 @@ export const contentGenerationPrompt = (user: UserType | null) => (
         "generalRisk": "Alto" | "Médio" | "Baixo",
         "assets": [
           {
-            "id": "a1",
+            "id": "asset_1",
             "assetName": "Tesouro Selic",
             "type": "Renda Fixa",
             "percentageAllocation": 50,
@@ -63,7 +55,7 @@ export const contentGenerationPrompt = (user: UserType | null) => (
             }],
           },
           {
-            "id": "b1",
+            "id": "asset_2",
             "assetName": "ITUB4 - Itaú Unibanco",
             "type": "Ações",
             "percentageAllocation": 25,
