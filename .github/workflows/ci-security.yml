@@ -1,0 +1,55 @@
+name: ci-security
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  build-test-security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install deps (clean)
+        run: npm ci
+
+      # ---------- TESTES ----------
+      - name: Run tests (CI)
+        run: |
+          npm run test:ci --if-present || npm test -- --ci
+
+      # ---------- SCA (dependências) ----------
+      - name: Audit dependencies (High/Critical -> fail)
+        run: |
+          npm audit --audit-level=high
+
+      # ---------- SAST (código) ----------
+      - name: Semgrep SAST (fail on findings)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/ci
+          generateSarif: true
+          auditOn: push
+          publishToken: ""
+          strict: true   # falha se houver achados
+        env:
+          SEMGREP_APP_TOKEN: ""
+
+      # ---------- artefatos opcionais ----------
+      - name: Upload Semgrep SARIF (opcional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-sarif
+          path: semgrep.sarif
+          if-no-files-found: ignore
